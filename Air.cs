@@ -3,7 +3,7 @@ using System;
 using System.Reflection;
 
 public partial class Air : LimboState {
-	// exposed godot inspector "constants"
+	// exposed godot inspector parameter "constants"
 	[Export] public float Accel = 2.65f;
 	[Export] public float InitialMaxSpeed = 130.0f;
 	[Export] public float MaxTurnSpeed = 40.0f;
@@ -15,9 +15,8 @@ public partial class Air : LimboState {
 	[Export] public float JumpBufferTime = 0.1f;
 	
 	// godot nodes
-	private CharacterBody2D _body;
-	private Timer _buffer;
-	private CollisionShape2D _feet;
+	[Export] private CharacterBody2D _body;
+	[Export] private Timer _buffer;
 	
 	// air turn nerfing vars
 	private float _airborne_start_dir = 0.0f;
@@ -27,10 +26,9 @@ public partial class Air : LimboState {
 	private bool _is_floating_jump = false;
 	
 	// Called when the fsm is being initialized
-	public override void _Setup() {
-		_body = GetNode<CharacterBody2D>("%Assets/..");
-		_buffer = GetNode<Timer>("%Assets/JumpBuffer");
-	}
+	// public override void _Setup() {
+	// 	_body = (CharacterBody2D)Blackboard.GetVar("PlayerBody");
+	// }
 	
 	public override void _Enter() {
 		// air turn nerfing prep 

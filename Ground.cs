@@ -3,6 +3,7 @@ using System;
 
 public partial class Ground : LimboState
 {
+	// exposed godot inspector parameter "constants"
 	[Export] public float GroundAccel = 5.0f;
 	[Export] public float MaxSpeed = 130.0f;
 	[Export] public float GroundDeaccel = 1.75f;
@@ -11,9 +12,9 @@ public partial class Ground : LimboState
 	[Export] public float Gravity = 300.0f;
 	[Export] public float CoyoteTime = 0.1f;
 	
-	private CharacterBody2D _body;
-	private Timer _coyote;
-	private CollisionShape2D _feet;
+	[Export] private CharacterBody2D _body;
+	[Export] private Timer _coyote;
+	[Export] private CollisionShape2D _feet;
 	
 	private bool _is_landing_stop = false;
 
@@ -24,11 +25,9 @@ public partial class Ground : LimboState
 	}
 	
 	// Called when the node enters the scene tree for the first time.
-	public override void _Setup() {
-		_body = GetNode<CharacterBody2D>("%Assets/..");
-		_coyote = GetNode<Timer>("%Assets/CoyoteTimer");
-		_feet = GetNode<CollisionShape2D>("%Assets/../RetractableFeet");
-	}
+	// public override void _Setup() {
+	// 	_body = (CharacterBody2D)Blackboard.GetVar("PlayerBody");
+	// }
 	
 	public override void _Enter() {
 		GD.Print("feet enabled");

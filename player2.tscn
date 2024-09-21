@@ -1,0 +1,100 @@
+[gd_scene load_steps=10 format=3 uid="uid://3usgh0tm8i6b"]
+
+[ext_resource type="Script" path="res://Player.cs" id="1_pbgte"]
+[ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://assets/icon.svg" id="2_1jtts"]
+[ext_resource type="BlackboardPlan" uid="uid://bh3m2g5u6xosw" path="res://assets/player_blackboard.tres" id="3_7gpl4"]
+[ext_resource type="Script" path="res://Air.cs" id="4_i0amv"]
+[ext_resource type="Script" path="res://Ground.cs" id="5_oadae"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
+radius = 5.0
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_gs7ls"]
+length = 10.0
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_virfy"]
+length = 7.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fg58r"]
+size = Vector2(10, 10)
+
+[node name="Player" type="CharacterBody2D"]
+floor_constant_speed = true
+script = ExtResource("1_pbgte")
+
+[node name="Assets" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Assets"]
+scale = Vector2(0.174, 0.25)
+texture = ExtResource("2_1jtts")
+
+[node name="PlatformMachine" type="LimboHSM" parent="Assets"]
+blackboard_plan = ExtResource("3_7gpl4")
+update_mode = 2
+
+[node name="Air" type="LimboState" parent="Assets/PlatformMachine"]
+script = ExtResource("4_i0amv")
+
+[node name="Ground" type="LimboState" parent="Assets/PlatformMachine"]
+script = ExtResource("5_oadae")
+
+[node name="JumpBuffer" type="Timer" parent="Assets"]
+editor_description = "should process callback be idle so speedrunners can buffer jumps or physics to prevent cheating?"
+wait_time = 0.1
+one_shot = true
+
+[node name="CoyoteTimer" type="Timer" parent="Assets"]
+editor_description = "should process callback be physics so speedrunners can buffer jumps or idle to prevent cheating?"
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
+[node name="Core" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_gwl27")
+
+[node name="PushCeiling" type="CollisionShape2D" parent="."]
+position = Vector2(0, -6)
+rotation = 3.14159
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Left" type="CollisionShape2D" parent="."]
+position = Vector2(-5, 6)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Center" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Right" type="CollisionShape2D" parent="."]
+position = Vector2(5, 6)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushRightWall-Bottom" type="CollisionShape2D" parent="."]
+position = Vector2(4, 4)
+rotation = 4.71239
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="."]
+position = Vector2(-4, 4)
+rotation = 1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushRightWall-Top" type="CollisionShape2D" parent="."]
+position = Vector2(4, -4)
+rotation = 4.71239
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushLeftWall-Top" type="CollisionShape2D" parent="."]
+position = Vector2(-4, -4)
+rotation = 1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="RetractableFeet" type="CollisionShape2D" parent="."]
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_fg58r")
+disabled = true
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="LimboState" type="LimboState" parent="."]

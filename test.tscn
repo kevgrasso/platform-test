@@ -1,0 +1,69 @@
+[gd_scene load_steps=5 format=4 uid="uid://dklm4g65kclcr"]
+
+[ext_resource type="PackedScene" uid="uid://3usgh0tm8i6b" path="res://player2.tscn" id="1_o6p87"]
+[ext_resource type="Material" uid="uid://cywdpu7v81itf" path="res://assets/textmodefront.tres" id="2_3snav"]
+[ext_resource type="TileSet" uid="uid://d10twc0sxowwx" path="res://kenny 1-bit.tres" id="2_h80c0"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o6qqx"]
+distance = -194.0
+
+[node name="Node2D" type="Node2D"]
+position = Vector2(14, 22)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Background Colors" type="ColorRect" parent="."]
+offset_left = 149.0
+offset_top = 42.0
+offset_right = 229.0
+offset_bottom = 58.0
+color = Color(0.652789, 7.08485e-05, 0.541714, 1)
+
+[node name="Playfield" type="CanvasGroup" parent="."]
+position = Vector2(-14, -22)
+
+[node name="Ray Player" parent="Playfield" instance=ExtResource("1_o6p87")]
+z_index = 2
+position = Vector2(95, -11)
+
+[node name="Character Mask" type="TileMapLayer" parent="Playfield"]
+clip_children = 1
+position = Vector2(19, 0)
+tile_map_data = PackedByteArray("AAD9/wEAAQAFAAQAAAD+/wEAAQAFAAQAAAD//wEAAQAFAAQAAAD8/wEAAQAFAAQAAAD7/wEAAQAFAAQAAAACAAIAAQAFAAQAAAADAAIAAQAFAAQAAAAEAAIAAQAFAAQAAAAFAAIAAQAFAAQAAAAGAAIAAQAFAAQAAAD+/wUAAQAFAAQAAAD//wUAAQAFAAQAAAAAAAUAAQAFAAQAAAABAAUAAQAFAAQAAAACAAUAAQAFAAQAAADx/wQAAgAFAAcAAADy/wQAAgAFAAcAAADz/wQAAgAFAAcAAAD0/wQAAgAFAAcAAAD2/wUAAgAFAAcAAAD1/wUAAgAFAAcAAAD1/wYAAgAFAAcAAAD0/wYAAgAFAAcAAAD0/wUAAgAFAAcAAAAGAAUAAgAFAAcAAAAHAAUAAgAFAAcAAAAIAAUAAgAFAAcAAAAJAAQAAgAFAAcAAAAKAAQAAgAFAAcAAAALAAQAAgAFAAcAAAAMAAQAAgAFAAcAAAANAAQAAgAFAAcAAAAOAAQAAgAFAAcAAAAPAAQAAgAFAAcAAAAOAAAAAgAFAAcAAAAPAAAAAgAFAAcAAAAQAAAAAgAFAAcAAAARAAAAAgAFAAcAAAASAAAAAgAFAAcAAAATAAAAAgAFAAcAAAAHAAgAAgAFAAcAAAAGAAgAAgAFAAcAAAAFAAgAAgAFAAcAAAAEAAgAAgAFAAcAAAADAAgAAgAFAAcAAAACAAgAAgAFAAcAAAAQAAYAAgAFAAcAAAARAAYAAgAFAAcAAAASAAYAAgAFAAcAAAATAAYAAgAFAAcAAAAUAAYAAgAFAAcAAAD3/wEAAgAFAAcAAAD6/wEAAgAFAAcAAAD5/wEAAgAFAAcAAAD4/wEAAgAFAAcAAAD2/wEAAgAFAAcAAAD5/wAAAAALAAsAAAD8/wwAAAAVAAEAAAD8/wsAAAAVAAEAAAD8/woAAAAVAAEAAAD8/wkAAAAVAAEAAAD8/wgAAAAVAAEAAAD8/wcAAAAVAAEAAAD8/wYAAAAVAAEAAAD8/wUAAAAVAAEAAAD8/wQAAAAVAAEAAAD8/wMAAAAVAAEAAAD8/wIAAAAVAAEAAAD8/wAAAAAVAAAAAADz/wEAAgAFAAcAAADw/wEAAgAFAAcAAADt/wEAAgAFAAcAAADq/wEAAgAFAAcAAAD2/wAAAgAMAAMAAAA=")
+tile_set = ExtResource("2_h80c0")
+navigation_enabled = false
+
+[node name="Foreground Colors" type="ColorRect" parent="Playfield/Character Mask"]
+material = ExtResource("2_3snav")
+offset_left = 144.0
+offset_top = 62.0
+offset_right = 204.0
+offset_bottom = 78.0
+color = Color(0, 0.227451, 1, 1)
+
+[node name="Foreground Colors 2" type="ColorRect" parent="Playfield/Character Mask"]
+material = ExtResource("2_3snav")
+offset_left = 204.0
+offset_top = 64.0
+offset_right = 242.0
+offset_bottom = 80.0
+color = Color(0, 1, 0, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Playfield"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Playfield/StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_o6qqx")
+
+[node name="DebugText" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+offset_left = -308.0
+offset_top = -170.0
+offset_right = 311.0
+offset_bottom = -90.0
+focus_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_following = true
+autowrap_mode = 0
+context_menu_enabled = true
+selection_enabled = true

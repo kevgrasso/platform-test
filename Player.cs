@@ -3,21 +3,6 @@ using System;
 using System.Reflection;
 
 public partial class Player : CharacterBody2D {
-	[Export] public float AirAccel = 2.65f;
-	[Export] public float GroundAccel = 5.0f;
-	[Export] public float MaxSpeed = 130.0f;
-	[Export] public float GroundDeaccel = 1.75f;
-	[Export] public float LandingDeaccel = 4.35f;
-	[Export] public float TurnSkidFactor = 0.8f;
-	[Export] public float MaxAirTurnSpeed = 40.0f;
-	[Export] public float BaseJumpVelocity = 140.0f;
-	[Export] public float SpeedJumpVelBonus = 0.15f;
-	[Export] public float NormalGravity = 300.0f;
-	[Export] public float FloatGravity = 200.0f;
-	[Export] public float JumpCancelFactor = 0.3f;
-	[Export] public float CoyoteTime = 0.1f;
-	[Export] public float JumpBufferTime = 0.1f;
-	
 	private Godot.LimboHsm _hsm;
 	private RichTextLabel _debug;
 	private bool _is_floating_jump = false;

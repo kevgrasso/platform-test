@@ -22,7 +22,6 @@ floor_constant_speed = true
 script = ExtResource("1_pbgte")
 
 [node name="Assets" type="Node2D" parent="."]
-unique_name_in_owner = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Assets"]
 scale = Vector2(0.174, 0.25)

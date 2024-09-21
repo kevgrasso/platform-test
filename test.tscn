@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=4 uid="uid://dklm4g65kclcr"]
 
-[ext_resource type="PackedScene" uid="uid://3usgh0tm8i6b" path="res://player2.tscn" id="1_o6p87"]
+[ext_resource type="PackedScene" uid="uid://3usgh0tm8i6b" path="res://player.tscn" id="1_o6p87"]
 [ext_resource type="Material" uid="uid://cywdpu7v81itf" path="res://assets/textmodefront.tres" id="2_3snav"]
 [ext_resource type="TileSet" uid="uid://d10twc0sxowwx" path="res://kenny 1-bit.tres" id="2_h80c0"]
 

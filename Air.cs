@@ -5,7 +5,7 @@ using System.Reflection;
 public partial class Air : LimboState {
 	// exposed godot inspector "constants"
 	[Export] public float Accel = 2.65f;
-	[Export] public float MaxSpeed = 130.0f;
+	[Export] public float InitialMaxSpeed = 130.0f;
 	[Export] public float MaxTurnSpeed = 40.0f;
 	[Export] public float BaseJumpVelocity = 140.0f;
 	[Export] public float SpeedJumpVelBonus = 0.15f;
@@ -26,7 +26,7 @@ public partial class Air : LimboState {
 	// jump modulation vars
 	private bool _is_floating_jump = false;
 	
-	// Called when the node enters the scene tree for the first time.
+	// Called when the fsm is being initialized
 	public override void _Setup() {
 		_body = GetNode<CharacterBody2D>("%Assets/..");
 		_buffer = GetNode<Timer>("%Assets/JumpBuffer");
@@ -36,7 +36,7 @@ public partial class Air : LimboState {
 		// air turn nerfing prep 
 		_airborne_start_dir = Mathf.Sign(_body.Velocity.X);
 		_is_air_turn = false;
-		if (Input.IsActionPressed("jump")) { // FIXME: not a good enough condition!!
+		if (Input.IsActionPressed("jump")) {
 			// jump setup
 			float y_vel = _body.UpDirection.Y * BaseJumpVelocity;
 			y_vel += _body.UpDirection.Y * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
@@ -90,15 +90,32 @@ public partial class Air : LimboState {
 			frame_vel.Y -= _body.UpDirection.Y * NormalGravity * deltaf;
 		}
 
-		// calculate the movement
+		// calculate movement vars
 		float direction = Mathf.Sign(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
 		);
+		float max_speed;
+		if (!_is_air_turn) { // determine maximum air speed
+			 max_speed = InitialMaxSpeed;
+			if (_airborne_start_dir == 0.0f && frame_vel.X != 0.0f) {
+				// handle neutral jump case
+				_airborne_start_dir = Mathf.Sign(frame_vel.X);
+			} else if (_airborne_start_dir * Mathf.Sign(frame_vel.X) != 1.0f) {
+				// air turn occured--nerf max speed for rest of airborne state
+				_is_air_turn = true;
+			}
+		} else {
+			max_speed = MaxTurnSpeed;
+		}
+
+		// calculate the movement
 		frame_vel.X += direction * Accel;
-		if (Mathf.Abs(frame_vel.X) > MaxSpeed) { // speed limit
-			frame_vel.X = direction * MaxSpeed;
+		if (Mathf.Abs(frame_vel.X) > max_speed) { // speed limit
+			frame_vel.X = direction * max_speed;
 		} 
-		_body.Velocity = frame_vel; // final result (_body calls movement)
+
+		// finally, perform the movement
+		_body.Velocity = frame_vel;
 		_body.MoveAndSlide();
 	}
 }

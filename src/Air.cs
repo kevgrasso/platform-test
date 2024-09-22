@@ -20,29 +20,27 @@ public partial class Air : LimboState {
 	// jump modulation vars
 	private bool _is_floating_jump = false;
 
-	// Called when the fsm is being initialized
-	public override void _Setup() {
-		AddEventHandler("jumping", Callable.From(OnJumpingStart));
-		AddEventHandler("buffered jump", Callable.From(OnJumpingStart));
-		AddEventHandler("airborne", Callable.From(OnAirborneStart));
+	public void OnJumped() {
+			_is_floating_jump = true;
 	}
-	public bool OnJumpingStart() {
+
+	// Called when the fsm is being initialized
+	public override void _Enter() {
+		if (_is_floating_jump) {
 			// jump setup
 			float y_vel = _body.UpDirection.Y * BaseJumpVelocity;
 			y_vel += _body.UpDirection.Y * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
 			_body.Velocity = new Vector2(_body.Velocity.X, y_vel);
 			GD.Print($"jump body vel: {_body.Velocity.Y}");
-			
+		} else {
 			_buffer.Stop();
-			_is_floating_jump = true;
-			return true;
-	}
-
-	public bool OnAirborneStart() {
 			// no jump
 			GD.Print($"no jump body vel: {_body.Velocity.Y}");
+		}
+	}
+
+	public override void _Exit() {
 			_is_floating_jump = false;
-			return false;
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -61,7 +59,9 @@ public partial class Air : LimboState {
 		//check if a state transition is necessary
 		if (_body.IsOnFloor() && _body.Velocity.Y == 0) {
 			if (!_buffer.IsStopped()) {
-				Dispatch("buffered jump");
+				Dispatch("buffered jump", true);
+				CallDeferred(MethodName.OnJumped);
+				OnJumped();
 				GD.Print("buffered");
 			} else {
 				Dispatch("grounded");

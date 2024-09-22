@@ -100,3 +100,5 @@ disabled = true
 [node name="Node2D" type="Node2D" parent="."]
 
 [node name="LimboState" type="LimboState" parent="."]
+
+[connection signal="Jumped" from="Assets/PlatformMachine/Ground" to="Assets/PlatformMachine/Air" method="OnJumped"]

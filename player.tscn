@@ -1,9 +1,9 @@
 [gd_scene load_steps=9 format=3 uid="uid://3usgh0tm8i6b"]
 
-[ext_resource type="Script" path="res://Player.cs" id="1_pbgte"]
+[ext_resource type="Script" path="res://src/Player.cs" id="1_pbgte"]
 [ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://assets/icon.svg" id="2_1jtts"]
-[ext_resource type="Script" path="res://Air.cs" id="4_i0amv"]
-[ext_resource type="Script" path="res://Ground.cs" id="5_oadae"]
+[ext_resource type="Script" path="res://src/Air.cs" id="4_i0amv"]
+[ext_resource type="Script" path="res://src/Ground.cs" id="5_oadae"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
 radius = 5.0
@@ -32,7 +32,6 @@ update_mode = 2
 
 [node name="Air" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_buffer")]
 script = ExtResource("4_i0amv")
-MaxTurnSpeed = 130.0
 _body = NodePath("../../..")
 _buffer = NodePath("../../JumpBuffer")
 

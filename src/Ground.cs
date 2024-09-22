@@ -66,10 +66,13 @@ public partial class Ground : LimboState
 		
 		// if player can jump and asked for a jump within the allotted time,
 		// start jumping!
-		if (Input.IsActionJustPressed("jump") || _coyote.IsStopped()) {
+		if (_coyote.IsStopped()) { 
+			// coyote timer ran out--start falling
+			Dispatch("airborne");
+		} else if (Input.IsActionJustPressed("jump")) {
 			GD.Print($"jump start. coyote jump: {!_body.IsOnFloor()}");
 			_coyote.Stop();
-			Dispatch("airborne");
+			Dispatch("jumping");
 		}
 
 		// apply gravity

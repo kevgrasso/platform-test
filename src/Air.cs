@@ -19,26 +19,30 @@ public partial class Air : LimboState {
 
 	// jump modulation vars
 	private bool _is_floating_jump = false;
-	
+
 	// Called when the fsm is being initialized
-	// public override void _Setup() {
-	// 	_body = (CharacterBody2D)Blackboard.GetVar("PlayerBody");
-	// }
-	
-	public override void _Enter() {
-		if (Input.IsActionPressed("jump")) {
+	public override void _Setup() {
+		AddEventHandler("jumping", Callable.From(OnJumpingStart));
+		AddEventHandler("buffered jump", Callable.From(OnJumpingStart));
+		AddEventHandler("airborne", Callable.From(OnAirborneStart));
+	}
+	public bool OnJumpingStart() {
 			// jump setup
 			float y_vel = _body.UpDirection.Y * BaseJumpVelocity;
 			y_vel += _body.UpDirection.Y * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
 			_body.Velocity = new Vector2(_body.Velocity.X, y_vel);
-			GD.Print($"body vel: {_body.Velocity.Y}");
+			GD.Print($"jump body vel: {_body.Velocity.Y}");
 			
 			_buffer.Stop();
 			_is_floating_jump = true;
-		} else {
+			return true;
+	}
+
+	public bool OnAirborneStart() {
 			// no jump
+			GD.Print($"no jump body vel: {_body.Velocity.Y}");
 			_is_floating_jump = false;
-		}
+			return false;
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

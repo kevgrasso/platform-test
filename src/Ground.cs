@@ -18,6 +18,8 @@ public partial class Ground : LimboState
 	
 	private bool _is_landing_stop = false;
 
+	[Signal] public delegate void JumpedEventHandler();
+
 	private static float GetInputDirection() {
 		return Mathf.Sign(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
@@ -72,7 +74,8 @@ public partial class Ground : LimboState
 		} else if (Input.IsActionJustPressed("jump")) {
 			GD.Print($"jump start. coyote jump: {!_body.IsOnFloor()}");
 			_coyote.Stop();
-			Dispatch("jumping");
+			EmitSignal("Jumped");
+			Dispatch("airborne");
 		}
 
 		// apply gravity

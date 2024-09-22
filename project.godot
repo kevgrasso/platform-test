@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="Gamedev"
-run/main_scene="res://test.tscn"
+run/main_scene="res://res/test.tscn"
 config/features=PackedStringArray("4.3", "C#", "GL Compatibility")
-config/icon="res://assets/icon.svg"
+config/icon="res://res/img/icon.svg"
 
 [display]
 

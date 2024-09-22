@@ -30,6 +30,7 @@ public partial class Player : CharacterBody2D {
 		// setup
 		_hsm.AddTransition(air, ground, "grounded");
 		_hsm.AddTransition(ground, air, "airborne");
+		_hsm.AddTransition(ground, air, "jumping");
 		_hsm.AddTransition(air, air, "buffered jump");
 		_hsm.InitialState = air;
 

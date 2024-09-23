@@ -18,6 +18,7 @@ public partial class Air : LimboState {
 	[Export] private Timer _buffer;
 
 	// jump modulation vars
+	private float _jump_length = 0.0f;
 	private bool _is_floating_jump = false;
 
 	public void OnJumped() {
@@ -46,6 +47,8 @@ public partial class Air : LimboState {
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Update(double delta) {
 		float deltaf = (float)delta;
+		// add half the movement now and half later to represent the average of jump
+		_jump_length += deltaf/2; 
 		
 		if (Input.IsActionJustPressed("jump")) {
 			// mark that player asked for a jump
@@ -96,5 +99,6 @@ public partial class Air : LimboState {
 		// finally, perform the movement
 		_body.Velocity = frame_vel;
 		_body.MoveAndSlide();
+		_jump_length += deltaf/2;
 	}
 }

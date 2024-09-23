@@ -8,9 +8,10 @@ public partial class Air : LimboState {
 	[Export] public float MaxSpeed = 130.0f;
 	[Export] public float BaseJumpVelocity = 140.0f;
 	[Export] public float SpeedJumpVelBonus = 0.15f;
-	[Export] public float NormalGravity = 300.0f;
-	[Export] public float FloatGravity = 200.0f;
-	[Export] public float JumpCancelFactor = 0.3f;
+	[Export] public float NormalGravity = 705.0f;
+	[Export] public float JumpFloatGravity = 200.0f;
+	[Export] public float FallFloatGravity = 235.0f; 
+	[Export] public float JumpCancelFactor = 0.75f;
 	[Export] public float JumpBufferTime = 0.1f;
 	
 	// godot nodes
@@ -18,7 +19,6 @@ public partial class Air : LimboState {
 	[Export] private Timer _buffer;
 
 	// jump modulation vars
-	private float _jump_length = 0.0f;
 	private bool _is_floating_jump = false;
 
 	public void OnJumped() {
@@ -43,17 +43,34 @@ public partial class Air : LimboState {
 	public override void _Exit() {
 			_is_floating_jump = false;
 	}
+
+	private float GetGravity() {
+		if (_is_floating_jump) {
+			if (_body.Velocity.Y < 0) {
+				return JumpFloatGravity;
+			} else {
+				return FallFloatGravity;
+			} 
+		} else {
+			// jump input released
+			return NormalGravity;
+		}
+	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Update(double delta) {
 		float deltaf = (float)delta;
-		// add half the movement now and half later to represent the average of jump
-		_jump_length += deltaf/2; 
 		
+		Vector2 frame_vel = _body.Velocity;
 		if (Input.IsActionJustPressed("jump")) {
 			// mark that player asked for a jump
 			_buffer.Start(JumpBufferTime); 
-		} else if (!Input.IsActionPressed("jump")) {
+		} else if (Input.IsActionJustReleased("jump")) {
+			if (_is_floating_jump && _body.Velocity.Y < 0) {
+				// truncate jump
+				frame_vel.Y *= JumpCancelFactor;
+			}
+			
 			// cancel jump actions
 			_is_floating_jump = false; 
 			_buffer.Stop();
@@ -73,18 +90,10 @@ public partial class Air : LimboState {
 		}
 		
 		// apply gravity
-		Vector2 frame_vel = _body.Velocity;
 		if (_body.IsOnCeiling()) {
 			frame_vel.Y = -_body.Velocity.Y;
-		} else if (_is_floating_jump) {
-			frame_vel.Y -= _body.UpDirection.Y * FloatGravity * deltaf;
 		} else {
-			// if ascending but the player released the jump button at some
-			// point, cancel the ascent
-			if (frame_vel.Y < 0) { 
-				frame_vel.Y *= Mathf.Pow(JumpCancelFactor, deltaf);
-			}
-			frame_vel.Y -= _body.UpDirection.Y * NormalGravity * deltaf;
+			frame_vel.Y -= _body.UpDirection.Y * GetGravity() * deltaf;
 		}
 
 		// calculate the movement
@@ -99,6 +108,5 @@ public partial class Air : LimboState {
 		// finally, perform the movement
 		_body.Velocity = frame_vel;
 		_body.MoveAndSlide();
-		_jump_length += deltaf/2;
 	}
 }

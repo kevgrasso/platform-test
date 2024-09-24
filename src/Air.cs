@@ -100,7 +100,7 @@ public partial class Air : LimboState {
 		
 		// apply gravity
 		if (_body.IsOnCeiling() && _body.Velocity.Y < 0) {
-			frame_vel.Y = -_body.Velocity.Y;
+			frame_vel = frame_vel.Reflect(_body.UpDirection.Orthogonal());
 		} else {
 			frame_vel.Y -= _body.UpDirection.Y * GetGravity() * deltaf;
 		}

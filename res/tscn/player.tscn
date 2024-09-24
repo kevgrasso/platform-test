@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/Ground.cs" id="5_oadae"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
-radius = 3.0
+radius = 4.0
 
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_gs7ls"]
 length = 13.0
@@ -24,6 +24,7 @@ script = ExtResource("1_pbgte")
 [node name="Assets" type="Node2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="Assets"]
+self_modulate = Color(1, 1, 1, 0.25098)
 position = Vector2(-1.19209e-07, 0.5)
 scale = Vector2(0.125, 0.242188)
 texture = ExtResource("2_1jtts")
@@ -57,48 +58,47 @@ one_shot = true
 shape = SubResource("CircleShape2D_gwl27")
 
 [node name="PushCeiling" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
 rotation = 3.14159
 shape = SubResource("SeparationRayShape2D_gs7ls")
 
-[node name="PushFloor-Left" type="CollisionShape2D" parent="."]
-position = Vector2(-4, 3)
-shape = SubResource("SeparationRayShape2D_gs7ls")
+[node name="PushRightWall-Top" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+position = Vector2(2, -4)
+rotation = -1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+one_way_collision_margin = 0.0
 
-[node name="PushFloor-Center" type="CollisionShape2D" parent="."]
-position = Vector2(0, 3)
-shape = SubResource("SeparationRayShape2D_gs7ls")
-
-[node name="PushFloor-Right" type="CollisionShape2D" parent="."]
-position = Vector2(4, 3)
-shape = SubResource("SeparationRayShape2D_gs7ls")
-
-[node name="PushRightWall-Bottom" type="CollisionShape2D" parent="."]
+[node name="PushRightWall-Bottom" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
 position = Vector2(2, 4)
 rotation = 4.71239
 shape = SubResource("SeparationRayShape2D_virfy")
 
-[node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="."]
-position = Vector2(-2, 4)
-rotation = 1.5708
-shape = SubResource("SeparationRayShape2D_virfy")
-
-[node name="PushRightWall-Top" type="CollisionShape2D" parent="."]
-position = Vector2(2, -4)
-rotation = 4.71239
-shape = SubResource("SeparationRayShape2D_virfy")
-one_way_collision_margin = 0.0
-
-[node name="PushLeftWall-Top" type="CollisionShape2D" parent="."]
+[node name="PushLeftWall-Top" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
 position = Vector2(-2, -4)
 rotation = 1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 
-[node name="RetractableFeet" type="CollisionShape2D" parent="."]
+[node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
+position = Vector2(-2, 4)
+rotation = 1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushFloor-Left" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(-4, 3)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Center" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(0, 3)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Right" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(4, 3)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="RetractableFeet" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
 position = Vector2(0, 11)
 scale = Vector2(0.718, 1)
 shape = SubResource("RectangleShape2D_fg58r")
 disabled = true
-
-[node name="Node2D" type="Node2D" parent="."]
 
 [connection signal="Jumped" from="Assets/PlatformMachine/Ground" to="Assets/PlatformMachine/Air" method="OnJumped"]

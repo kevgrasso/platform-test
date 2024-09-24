@@ -12,10 +12,12 @@ public partial class Player : CharacterBody2D {
 	
 	//FIXME:
 	// gets caught running off ledges sometimes -- it's in narrow gaps!
+	// buffered jumps aren't working
 	//TODO:
 	// tune air turnback penalty and give variable better name
 	// implement focus?
 	// ladders
+	// hanging from ledges
 	
 	public override void _Ready() {
 		_debug = GetNode<RichTextLabel>("%DebugText");

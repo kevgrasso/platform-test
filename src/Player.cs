@@ -5,21 +5,17 @@ using System.Reflection;
 public partial class Player : CharacterBody2D {
 	private Godot.LimboHsm _hsm;
 	private RichTextLabel _debug;
-	private bool _is_floating_jump = false;
-	private bool _is_landing_stop = false;
-	private bool _is_turning_jump = false;
-	// private float _p_speed = 0; //p-speed is cut
 	
 	//FIXME:
 	// buffered jumps aren't working
 	//TODO:
 	// tune air turnback penalty and give variable better name
+	// tune coyote jump gravity
 	//CUT:
 	// implement focus?
 	// ladders
 	// hanging from ledges
 	// p-speed
-
 	
 	public override void _Ready() {
 		_debug = GetNode<RichTextLabel>("%DebugText");

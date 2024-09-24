@@ -25,11 +25,18 @@ public partial class Ground : LimboState
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
 		);
 	}
-	
-	// Called when the node enters the scene tree for the first time.
-	// public override void _Setup() {
-	// 	_body = (CharacterBody2D)Blackboard.GetVar("PlayerBody");
-	// }
+	private float GetAccel(float direction) {
+		if (direction != 0) {
+			// there is active left/right directional input
+			return GroundAccel;
+		} else if (!_is_landing_stop) {
+			// no left/right directional input and isn't landing stop--slow drift to a stop
+			return GroundDeaccel;
+		} else {
+			// no left/right directional input and is landing stop--quick drift to a stop
+			return LandingDeaccel;
+		}
+	}
 	
 	public override void _Enter() {
 		GD.Print("feet enabled");
@@ -37,13 +44,7 @@ public partial class Ground : LimboState
 		_coyote.Start(CoyoteTime);
 		
 		// dampen landing velocity if held direction isn't forward
-		float direction = GetInputDirection();
-		if (Mathf.Sign(_body.Velocity.X) != direction || direction == 0) {
-			GD.Print("Landing Stop");
-			_is_landing_stop = true;
-		} else {
-			_is_landing_stop = false;
-		}
+		_is_landing_stop = true;
 	}
 	public override void _Exit() {
 		GD.Print("feet disabled");
@@ -59,15 +60,13 @@ public partial class Ground : LimboState
 		// init movement vars
 		float direction = GetInputDirection();
 		Vector2 frame_vel = _body.Velocity;
-		bool is_turning = Mathf.Sign(_body.Velocity.X) != direction;
-		
 		if (_body.IsOnFloor()) {
 			// indicate player can jump by readying coyote timer
 			_coyote.Start(CoyoteTime);
 		} else {
 			// in air apply gravity
 			frame_vel.Y -= _body.UpDirection.Y * CoyoteGravity * deltaf;
-		} 
+		}
 		
 		// if player can jump and asked for a jump within the allotted time,
 		// start jumping!
@@ -80,36 +79,18 @@ public partial class Ground : LimboState
 			EmitSignal("Jumped");
 			Dispatch("airborne");
 		}
-		// frame_vel.Y -= _body.UpDirection.Y * Gravity * deltaf;
 
 		// handle the movement/deceleration
-		if (direction != 0) {
-			frame_vel.X += direction * GroundAccel;
-			if (Mathf.Abs(frame_vel.X) > MaxSpeed) {
-				frame_vel.X = direction * MaxSpeed;
-			} else if (is_turning) {
-				frame_vel.X *= Mathf.Pow(TurnSkidFactor, (float)delta);
-			} else {
-				// must be holding forward so cancel landing stop
-				if (_is_landing_stop) {
-					GD.Print("landing stop cancelled 1");
-				}
-				_is_landing_stop = false;
-			}
-		} else {
-			float deaccel = Mathf.NaN;
-			if (!_is_landing_stop) {
-				deaccel = GroundDeaccel;
-			} else {
-				deaccel = LandingDeaccel;
-			}
-			frame_vel.X = Mathf.MoveToward(_body.Velocity.X, 0, deaccel);
-			if (frame_vel.X == 0) {
-				if (_is_landing_stop) {
-					GD.Print("landing stop cancelled 2");
-				}
-				_is_landing_stop = false;
-			}
+		// TODO: refactor
+		float max_oriented_speed = direction * MaxSpeed;
+		float forwardsness = Mathf.Sign(_body.Velocity.X) * direction; 
+		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, max_oriented_speed, GetAccel(direction));
+		if (forwardsness < 0) {
+			// turning case--apply skidding
+			frame_vel.X *= Mathf.Pow(TurnSkidFactor, (float)delta);
+		} else if (forwardsness > 0 || frame_vel.X == 0) {
+			// if stationary or holding forwards cancel stop
+			_is_landing_stop = false;
 		}
 
 		// move.

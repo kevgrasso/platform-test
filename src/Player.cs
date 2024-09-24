@@ -11,7 +11,6 @@ public partial class Player : CharacterBody2D {
 	// private float _p_speed = 0; //p-speed is cut
 	
 	//FIXME:
-	// gets caught running off ledges sometimes -- it's in narrow gaps!
 	// buffered jumps aren't working
 	//TODO:
 	// tune air turnback penalty and give variable better name

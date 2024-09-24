@@ -4,7 +4,9 @@ using System.Reflection;
 
 public partial class Air : LimboState {
 	// exposed godot inspector parameter "constants"
-	[Export] public float Accel = 2.65f;
+	[Export] public float InitialAccel = 2f;
+	[Export] public float FinalAccel = 2.65f;
+	[Export] public float AccelStartupTime = 35.0f;
 	[Export] public float MaxSpeed = 130.0f;
 	[Export] public float BaseJumpVelocity = 140.0f;
 	[Export] public float SpeedJumpVelBonus = 0.15f;
@@ -19,7 +21,7 @@ public partial class Air : LimboState {
 	[Export] private Timer _buffer;
 
 	// jump modulation vars
-	private float _jump_length = 0.0f;
+	private float _initial_jump_velocity = 0.0f;
 	private bool _is_floating_jump = false;
 
 	public void OnJumped() {
@@ -30,9 +32,10 @@ public partial class Air : LimboState {
 	public override void _Enter() {
 		if (_is_floating_jump) {
 			// jump setup
-			float y_vel = _body.UpDirection.Y * BaseJumpVelocity;
-			y_vel += _body.UpDirection.Y * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
-			_body.Velocity = new Vector2(_body.Velocity.X, y_vel);
+			float up = _body.UpDirection.Y;
+			_initial_jump_velocity = up * BaseJumpVelocity;
+			_initial_jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
+			_body.Velocity = new Vector2(_body.Velocity.X, _initial_jump_velocity);
 			GD.Print($"jump body vel: {_body.Velocity.Y}");
 		} else {
 			_buffer.Stop();
@@ -59,8 +62,8 @@ public partial class Air : LimboState {
 	}
 
 	private float GetHorizAccel() {
-		float amount = (_body.Velocity.Y + BaseJumpVelocity) / BaseJumpVelocity;
-		return Mathf.Lerp(0.0f, Accel, amount);
+		float amount = (_body.Velocity.Y + _initial_jump_velocity) / AccelStartupTime;
+		return Mathf.Lerp(InitialAccel, FinalAccel, Mathf.Clamp(amount, 0.0f, 1.0f));
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -83,7 +86,7 @@ public partial class Air : LimboState {
 		}
 		
 		//check if a state transition is necessary
-		if (_body.IsOnFloor() && _body.Velocity.Y == 0) {
+		if (_body.IsOnFloor() && _body.Velocity.Y >= 0) {
 			if (!_buffer.IsStopped()) {
 				Dispatch("buffered jump", true);
 				CallDeferred(MethodName.OnJumped);
@@ -96,7 +99,7 @@ public partial class Air : LimboState {
 		}
 		
 		// apply gravity
-		if (_body.IsOnCeiling()) {
+		if (_body.IsOnCeiling() && _body.Velocity.Y < 0) {
 			frame_vel.Y = -_body.Velocity.Y;
 		} else {
 			frame_vel.Y -= _body.UpDirection.Y * GetGravity() * deltaf;
@@ -114,6 +117,5 @@ public partial class Air : LimboState {
 		// finally, perform the movement
 		_body.Velocity = frame_vel;
 		_body.MoveAndSlide();
-		_jump_length += deltaf;
 	}
 }

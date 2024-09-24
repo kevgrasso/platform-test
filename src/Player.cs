@@ -15,9 +15,12 @@ public partial class Player : CharacterBody2D {
 	// buffered jumps aren't working
 	//TODO:
 	// tune air turnback penalty and give variable better name
+	//CUT:
 	// implement focus?
 	// ladders
 	// hanging from ledges
+	// p-speed
+
 	
 	public override void _Ready() {
 		_debug = GetNode<RichTextLabel>("%DebugText");
@@ -42,7 +45,7 @@ public partial class Player : CharacterBody2D {
 
 		_debug.Text = 
 			$"pos: {Position}\tlast motion: {GetLastMotion()}\n" + 
-			$"prev vel: {GetPositionDelta()}\tcur vel: {GetRealVelocity()}\n" + 
+			$"cur vel: {GetRealVelocity()}\tprev vel: {GetPositionDelta()}\n" + 
 			$"collision count; {GetSlideCollisionCount()}\n" +
 			$"ceil: {IsOnCeiling()}\tfloor: {IsOnFloor()}\twall: {IsOnWall()}";
 

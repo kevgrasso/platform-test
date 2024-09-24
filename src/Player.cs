@@ -11,13 +11,11 @@ public partial class Player : CharacterBody2D {
 	// private float _p_speed = 0; //p-speed is cut
 	
 	//FIXME:
-	// head can get stuck in ceiling by jumping into a corner
 	// gets caught running off ledges sometimes -- it's in narrow gaps!
-	// find way to remove extra air frame delay before disabling feet
 	//TODO:
+	// tune air turnback penalty and give variable better name
 	// implement focus?
 	// ladders
-	// max air turn speed
 	
 	public override void _Ready() {
 		_debug = GetNode<RichTextLabel>("%DebugText");

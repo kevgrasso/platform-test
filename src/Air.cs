@@ -19,6 +19,7 @@ public partial class Air : LimboState {
 	[Export] private Timer _buffer;
 
 	// jump modulation vars
+	private float _jump_length = 0.0f;
 	private bool _is_floating_jump = false;
 
 	public void OnJumped() {
@@ -55,6 +56,11 @@ public partial class Air : LimboState {
 			// jump input released
 			return NormalGravity;
 		}
+	}
+
+	private float GetHorizAccel() {
+		float amount = (_body.Velocity.Y + BaseJumpVelocity) / BaseJumpVelocity;
+		return Mathf.Lerp(0.0f, Accel, amount);
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -100,7 +106,7 @@ public partial class Air : LimboState {
 		float direction = Mathf.Sign(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
 		);
-		frame_vel.X += direction * Accel;
+		frame_vel.X += direction * GetHorizAccel();
 		if (Mathf.Abs(frame_vel.X) > MaxSpeed) { // speed limit
 			frame_vel.X = direction * MaxSpeed;
 		} 
@@ -108,5 +114,6 @@ public partial class Air : LimboState {
 		// finally, perform the movement
 		_body.Velocity = frame_vel;
 		_body.MoveAndSlide();
+		_jump_length += deltaf;
 	}
 }

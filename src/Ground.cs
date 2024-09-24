@@ -9,8 +9,8 @@ public partial class Ground : LimboState
 	[Export] public float GroundDeaccel = 1.75f;
 	[Export] public float LandingDeaccel = 4.35f;
 	[Export] public float TurnSkidFactor = 0.8f;
-	[Export] public float Gravity = 300.0f;
 	[Export] public float CoyoteTime = 0.1f;
+	[Export] public float CoyoteGravity = 300.0f;
 	
 	[Export] private CharacterBody2D _body;
 	[Export] private Timer _coyote;
@@ -64,6 +64,9 @@ public partial class Ground : LimboState
 		if (_body.IsOnFloor()) {
 			// indicate player can jump by readying coyote timer
 			_coyote.Start(CoyoteTime);
+		} else {
+			// in air apply gravity
+			frame_vel.Y -= _body.UpDirection.Y * CoyoteGravity * deltaf;
 		} 
 		
 		// if player can jump and asked for a jump within the allotted time,
@@ -77,9 +80,7 @@ public partial class Ground : LimboState
 			EmitSignal("Jumped");
 			Dispatch("airborne");
 		}
-
-		// apply gravity
-		frame_vel.Y -= _body.UpDirection.Y * Gravity * deltaf;
+		// frame_vel.Y -= _body.UpDirection.Y * Gravity * deltaf;
 
 		// handle the movement/deceleration
 		if (direction != 0) {

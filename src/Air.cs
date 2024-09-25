@@ -24,11 +24,18 @@ public partial class Air : LimboState {
 	private float _initial_jump_velocity = 0.0f;
 	private bool _is_floating_jump = false;
 
-	public void OnJumped() {
+	public bool OnJumped() {
+			GD.Print($"OnJumped event");
 			_is_floating_jump = true;
+			return false;
 	}
 
 	// Called when the fsm is being initialized
+	public override void _Setup() {
+		AddEventHandler("buffered jump", Callable.From(OnJumped));
+		AddEventHandler("grounded", Callable.From(() => _is_floating_jump = false));
+	}
+
 	public override void _Enter() {
 		if (_is_floating_jump) {
 			// jump setup
@@ -42,10 +49,6 @@ public partial class Air : LimboState {
 			// no jump
 			GD.Print($"no jump body vel: {_body.Velocity.Y}");
 		}
-	}
-
-	public override void _Exit() {
-			_is_floating_jump = false;
 	}
 
 	private float GetGravity() {
@@ -88,13 +91,9 @@ public partial class Air : LimboState {
 		//check if a state transition is necessary
 		if (_body.IsOnFloor() && _body.Velocity.Y >= 0) {
 			if (!_buffer.IsStopped()) {
-				Dispatch("buffered jump", true);
-				CallDeferred(MethodName.OnJumped);
-				OnJumped();
-				GD.Print("buffered");
+				Dispatch("buffered jump");
 			} else {
 				Dispatch("grounded");
-				GD.Print($"deltaf: {deltaf}");
 			}
 		}
 		

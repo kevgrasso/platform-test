@@ -15,7 +15,7 @@ public partial class Air : LimboState {
 	[Export] public float JumpFloatGravity = 200.0f;
 	[Export] public float FallFloatGravity = 235.0f; 
 	[Export] public float JumpCancelFactor = 0.75f;
-	[Export] public float JumpBufferTime = 0.1f;
+	[Export] public float JumpBufferTime = 0.09f;
 	
 	// godot nodes
 	[Export] private Player _body;

@@ -34,7 +34,7 @@ update_mode = 2
 
 [node name="Air" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_buffer")]
 script = ExtResource("4_i0amv")
-JumpBufferTime = 0.09
+GravityThreshold = 30.0
 _body = NodePath("../../..")
 _buffer = NodePath("../../JumpBuffer")
 

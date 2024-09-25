@@ -49,8 +49,8 @@ public partial class Player : CharacterBody2D {
 		_hsm.Update(delta);
 
 		_debug.Text = 
-			$"pos: {Position}\tlast motion: {GetLastMotion()}\n" + 
-			$"cur vel: {GetRealVelocity()}\tprev vel: {GetPositionDelta()}\n" + 
+			$"pos: {Position.Round()}\tlast motion: {GetLastMotion().Round()}\n" + 
+			$"cur vel: {GetRealVelocity().Round()}\tprev vel: {GetPositionDelta().Round()}\n" + 
 			$"collision count; {GetSlideCollisionCount()}\n" +
 			$"ceil: {IsOnCeiling()}\tfloor: {IsOnFloor()}\twall: {IsOnWall()}";
 

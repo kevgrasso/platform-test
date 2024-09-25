@@ -4,7 +4,10 @@ using System.Reflection;
 
 public partial class Air : LimboState {
 	// exposed godot inspector parameter "constants"
-	[Export] public float Accel = 2.65f;
+	[Export] public float StandardAccel = 2.65f;
+	[Export] public float TurningAccel = 0.5f;
+	[Export] public float DirThreshold = 49.893f;
+	[Export] public float GravityThreshold = 30.0f;
 	[Export] public float MaxSpeed = 130.0f;
 	[Export] public float BaseJumpVelocity = 140.0f;
 	[Export] public float SpeedJumpVelBonus = 0.15f;
@@ -19,6 +22,7 @@ public partial class Air : LimboState {
 	[Export] private Timer _buffer;
 
 	// jump modulation vars
+	private float _jump_direction = 0.0f;
 	private bool _is_floating_jump = false;
 
 	public bool OnJumped() {
@@ -40,6 +44,7 @@ public partial class Air : LimboState {
 			float jump_velocity = up * BaseJumpVelocity;
 			jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
 			_body.Velocity = new Vector2(_body.Velocity.X, jump_velocity);
+			_jump_direction = 0.0f; //reset
 			GD.Print($"jump body vel: {_body.Velocity.Y}");
 		} else {
 			_buffer.Stop();
@@ -58,6 +63,17 @@ public partial class Air : LimboState {
 		} else {
 			// jump input released
 			return NormalGravity;
+		}
+	}
+
+	private float GetAccel() {
+		// if moving the opposite direction to the start of the jump and aren't falling too fast
+		if ((_body.Velocity.X * _jump_direction) < 0 && _body.Velocity.Y < GravityThreshold) {
+			// backwards jump case--nerf acceleration
+			return TurningAccel;
+		} else {
+			// standard jump case
+			return StandardAccel;
 		}
 	}
 	
@@ -97,8 +113,14 @@ public partial class Air : LimboState {
 		}
 
 		// calculate the movement
-		float oriented_max_speed = _body.GetInputDirection() * MaxSpeed;
-		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, Accel);
+		float direction = _body.GetInputDirection();
+		if (_jump_direction == 0 && Mathf.Abs(_body.Velocity.X) > DirThreshold) {
+			_jump_direction = Mathf.Sign(_body.Velocity.X);
+			GD.Print($"x vel: {_body.Velocity.X}; jump dir: {_jump_direction}; {_body.Velocity.X * _jump_direction}");
+		}
+
+		float oriented_max_speed = direction * MaxSpeed;
+		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, GetAccel());
 		
 		_body.SetAndMove(frame_vel);
 	}

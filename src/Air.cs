@@ -4,9 +4,7 @@ using System.Reflection;
 
 public partial class Air : LimboState {
 	// exposed godot inspector parameter "constants"
-	[Export] public float InitialAccel = 2f;
-	[Export] public float FinalAccel = 2.65f;
-	[Export] public float AccelStartupTime = 35.0f;
+	[Export] public float Accel = 2.65f;
 	[Export] public float MaxSpeed = 130.0f;
 	[Export] public float BaseJumpVelocity = 140.0f;
 	[Export] public float SpeedJumpVelBonus = 0.15f;
@@ -17,11 +15,10 @@ public partial class Air : LimboState {
 	[Export] public float JumpBufferTime = 0.1f;
 	
 	// godot nodes
-	[Export] private CharacterBody2D _body;
+	[Export] private Player _body;
 	[Export] private Timer _buffer;
 
 	// jump modulation vars
-	private float _initial_jump_velocity = 0.0f;
 	private bool _is_floating_jump = false;
 
 	public bool OnJumped() {
@@ -40,9 +37,9 @@ public partial class Air : LimboState {
 		if (_is_floating_jump) {
 			// jump setup
 			float up = _body.UpDirection.Y;
-			_initial_jump_velocity = up * BaseJumpVelocity;
-			_initial_jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
-			_body.Velocity = new Vector2(_body.Velocity.X, _initial_jump_velocity);
+			float jump_velocity = up * BaseJumpVelocity;
+			jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
+			_body.Velocity = new Vector2(_body.Velocity.X, jump_velocity);
 			GD.Print($"jump body vel: {_body.Velocity.Y}");
 		} else {
 			_buffer.Stop();
@@ -62,11 +59,6 @@ public partial class Air : LimboState {
 			// jump input released
 			return NormalGravity;
 		}
-	}
-
-	private float GetHorizAccel() {
-		float amount = (_body.Velocity.Y + _initial_jump_velocity) / AccelStartupTime;
-		return Mathf.Lerp(InitialAccel, FinalAccel, Mathf.Clamp(amount, 0.0f, 1.0f));
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -105,16 +97,9 @@ public partial class Air : LimboState {
 		}
 
 		// calculate the movement
-		float direction = Mathf.Sign(
-			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
-		);
-		frame_vel.X += direction * GetHorizAccel();
-		if (Mathf.Abs(frame_vel.X) > MaxSpeed) { // speed limit
-			frame_vel.X = direction * MaxSpeed;
-		} 
-
-		// finally, perform the movement
-		_body.Velocity = frame_vel;
-		_body.MoveAndSlide();
+		float oriented_max_speed = _body.GetInputDirection() * MaxSpeed;
+		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, Accel);
+		
+		_body.SetAndMove(frame_vel);
 	}
 }

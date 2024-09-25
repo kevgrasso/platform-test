@@ -12,7 +12,7 @@ public partial class Ground : LimboState
 	[Export] public float CoyoteTime = 0.1f;
 	[Export] public float CoyoteGravity = 300.0f;
 	
-	[Export] private CharacterBody2D _body;
+	[Export] private Player _body;
 	[Export] private Timer _coyote;
 	[Export] private CollisionShape2D _feet;
 	
@@ -20,11 +20,6 @@ public partial class Ground : LimboState
 
 	[Signal] public delegate void JumpedEventHandler();
 
-	private static float GetInputDirection() {
-		return Mathf.Sign(
-			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
-		);
-	}
 	private float GetAccel(float direction) {
 		if (direction != 0) {
 			// there is active left/right directional input
@@ -58,7 +53,7 @@ public partial class Ground : LimboState
 		float deltaf = (float)delta;
 		
 		// init movement vars
-		float direction = GetInputDirection();
+		float direction = _body.GetInputDirection();
 		Vector2 frame_vel = _body.Velocity;
 		if (_body.IsOnFloor()) {
 			// indicate player can jump by readying coyote timer
@@ -81,10 +76,9 @@ public partial class Ground : LimboState
 		}
 
 		// handle the movement/deceleration
-		// TODO: refactor
-		float max_oriented_speed = direction * MaxSpeed;
-		float forwardsness = Mathf.Sign(_body.Velocity.X) * direction; 
-		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, max_oriented_speed, GetAccel(direction));
+		float oriented_max_speed = direction * MaxSpeed;
+		float forwardsness = Mathf.Sign(_body.Velocity.X * direction); 
+		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, GetAccel(direction));
 		if (forwardsness < 0) {
 			// turning case--apply skidding
 			frame_vel.X *= Mathf.Pow(TurnSkidFactor, (float)delta);
@@ -93,8 +87,6 @@ public partial class Ground : LimboState
 			_is_landing_stop = false;
 		}
 
-		// move.
-		_body.Velocity = frame_vel;
-		_body.MoveAndSlide();
+		_body.SetAndMove(frame_vel);
 	}
 }

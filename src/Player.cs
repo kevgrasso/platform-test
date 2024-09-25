@@ -7,12 +7,11 @@ public partial class Player : CharacterBody2D {
 	private RichTextLabel _debug;
 	
 	//FIXME:
-	// buffered jumps aren't working
 	//TODO:
 	// tune air turnback penalty and give variable better name
 	// tune coyote jump gravity
 	//CUT:
-	// implement focus?
+	// focus?
 	// ladders
 	// hanging from ledges
 	// p-speed

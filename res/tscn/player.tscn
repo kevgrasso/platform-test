@@ -6,13 +6,13 @@
 [ext_resource type="Script" path="res://src/Ground.cs" id="5_oadae"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
-radius = 4.0
+radius = 3.0
 
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_gs7ls"]
 length = 13.0
 
 [sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_virfy"]
-length = 6.0
+length = 8.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fg58r"]
 size = Vector2(8, 10)
@@ -66,23 +66,23 @@ rotation = 3.14159
 shape = SubResource("SeparationRayShape2D_gs7ls")
 
 [node name="PushRightWall-Top" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
-position = Vector2(2, -4)
+position = Vector2(0, -4)
 rotation = -1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 one_way_collision_margin = 0.0
 
 [node name="PushRightWall-Bottom" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
-position = Vector2(2, 4)
+position = Vector2(0, 4)
 rotation = 4.71239
 shape = SubResource("SeparationRayShape2D_virfy")
 
 [node name="PushLeftWall-Top" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
-position = Vector2(-2, -4)
+position = Vector2(0, -4)
 rotation = 1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 
 [node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
-position = Vector2(-2, 4)
+position = Vector2(0, 4)
 rotation = 1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 

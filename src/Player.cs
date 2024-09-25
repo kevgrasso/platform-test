@@ -33,6 +33,17 @@ public partial class Player : CharacterBody2D {
 		_hsm.Initialize(this);
 		_hsm.SetActive(true);
 	}
+
+	public float GetInputDirection() {
+		return Mathf.Sign(
+			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
+		);
+	}
+
+	public bool SetAndMove(Vector2 velocity) {
+		Velocity = velocity;
+		return MoveAndSlide();
+	}
 	
 	public override void _PhysicsProcess(double delta) {
 		_hsm.Update(delta);

@@ -24,7 +24,6 @@ script = ExtResource("1_pbgte")
 [node name="Assets" type="Node2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="Assets"]
-self_modulate = Color(1, 1, 1, 0.25098)
 position = Vector2(-1.19209e-07, 0.5)
 scale = Vector2(0.125, 0.242188)
 texture = ExtResource("2_1jtts")
@@ -34,14 +33,11 @@ update_mode = 2
 
 [node name="Air" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_buffer")]
 script = ExtResource("4_i0amv")
-GravityThreshold = 30.0
 _body = NodePath("../../..")
 _buffer = NodePath("../../JumpBuffer")
 
 [node name="Ground" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_coyote", "_feet")]
 script = ExtResource("5_oadae")
-CoyoteTime = 0.09
-CoyoteGravity = 560.0
 _body = NodePath("../../..")
 _coyote = NodePath("../../CoyoteTimer")
 _feet = NodePath("../../../RetractableFeet")

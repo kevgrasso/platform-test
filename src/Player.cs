@@ -8,8 +8,6 @@ public partial class Player : CharacterBody2D {
 	
 	//FIXME:
 	//TODO:
-	// tune air turnback penalty and give variable better name
-	// tune coyote jump gravity
 	//CUT:
 	// focus?
 	// ladders

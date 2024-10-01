@@ -64,7 +64,6 @@ script = ExtResource("1_pi5w6")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
@@ -85,7 +84,6 @@ justification_flags = 0
 [node name="Playfield" type="PanelContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 336)
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_hdwp8")
 
 [node name="ApertureRect" type="ReferenceRect" parent="VBoxContainer/Playfield"]

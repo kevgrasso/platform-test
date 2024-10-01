@@ -1,0 +1,39 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://bj70wjx0ov663"
+path="res://.godot/imported/Silver.ttf-7327ba64b5329d95fef39dbf4efdd2b8.fontdata"
+
+[deps]
+
+source_file="res://res/font/Silver.ttf"
+dest_files=["res://.godot/imported/Silver.ttf-7327ba64b5329d95fef39dbf4efdd2b8.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=0
+generate_mipmaps=false
+disable_embedded_bitmaps=false
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+hinting=2
+subpixel_positioning=0
+oversampling=0.0
+Fallbacks=null
+fallbacks=[Resource("res://res/font/UnifontExMono.woff2")]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0)
+}]
+language_support={}
+script_support={}
+opentype_features={}

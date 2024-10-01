@@ -88,9 +88,11 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxTexture_hdwp8")
 
-[node name="AperatureRect" type="ReferenceRect" parent="VBoxContainer/Playfield"]
+[node name="ApertureRect" type="ReferenceRect" parent="VBoxContainer/Playfield"]
 unique_name_in_owner = true
 layout_mode = 2
+border_color = Color(1, 0, 0, 0)
+border_width = 0.0
 
 [node name="Sidebar" type="PanelContainer" parent="."]
 layout_mode = 2

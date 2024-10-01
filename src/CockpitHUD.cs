@@ -2,7 +2,8 @@ using Godot;
 using System;
 
 public partial class CockpitHUD : HBoxContainer {
-	public Vector2 GetAperatureSize() {
-		return GetNode<ReferenceRect>("%AperatureRect").Size;
+	public Rect2 GetApertureRect() {
+		ReferenceRect aperture = GetNode<ReferenceRect>("%ApertureRect");
+		return new Rect2(aperture.GlobalPosition, aperture.Size);
 	}
 }

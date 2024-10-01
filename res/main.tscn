@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c5ckhha3drvt1" path="res://res/tscn/map/test.tscn" id="1_uk20t"]
 [ext_resource type="PackedScene" uid="uid://bunltxb5wd7ac" path="res://res/tscn/CockpitHUD.tscn" id="2_paib7"]
-[ext_resource type="Script" path="res://res/MainCamera.cs" id="3_a363f"]
+[ext_resource type="Script" path="res://src/MainCamera.cs" id="3_a363f"]
 
 [node name="Game" type="Node2D"]
 
@@ -34,6 +34,7 @@ selection_enabled = true
 [node name="CockpitHUD" parent="GUILayer" instance=ExtResource("2_paib7")]
 
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
+visible = false
 offset_left = 16.0
 offset_top = 40.0
 offset_right = 496.0

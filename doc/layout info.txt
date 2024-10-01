@@ -1,0 +1,43 @@
+stuff gui in canvaslayer (layer & follow viewport options)
+root node has anchor controls
+
+useful universal control settings:
+	layout: custom minimum size
+	container sizing (on toolbar)
+	tooltip
+	focus
+	theme overrides
+
+the useful nodes and settings:
+	hboxcontainer/vboxcontainer
+  		theme overrides: separation = 0
+	panelcontainer/label
+		theme overrides: styles
+			can give color or texture background and/or nine panel slice border, etc
+			content margins
+	label
+		label settings = labelsettings
+			line spacing = 0 (or negative)
+		justification flags
+	hseparator/vseparator
+		theme overrides: separator = styleboxline
+	ninepatchrect/styleboxtexture
+		draw center
+		sub-region/region rect: edit region
+		texture margins/patch margin (define the nine patches)
+		axis stretch = tile
+	richtextlabel
+		theme overrides
+			fonts
+			font sizes
+			everything else
+	scrollcontainer
+	tabcontainer (name of children are tab labels)
+	centercontainer
+	margincontainer
+		theme overrides
+	viewporttexture/subviewportcontainer
+	colorrect/texturerect
+	referencerect?
+	
+	

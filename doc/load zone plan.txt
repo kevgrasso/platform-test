@@ -1,0 +1,12 @@
+put all this on camera or root node
+
+absolute load zone:
+-vector2i src
+-scene there
+-vector2i dest
+
+relative load zone:
+-scene here
+-scene there
+-vector2i offset
+-vector2i[] intersections

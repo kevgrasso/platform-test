@@ -11,15 +11,21 @@ config_version=5
 [application]
 
 config/name="Gamedev"
+config/version="dev0"
 run/main_scene="res://res/main.tscn"
 config/features=PackedStringArray("4.3", "C#", "GL Compatibility")
+run/max_fps=60
 config/icon="res://res/img/icon.svg"
+
+[debug]
+
+settings/stdout/print_fps=true
+settings/stdout/print_gpu_profile=true
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/size/extend_to_title=true
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/energy_saving/keep_screen_on=false
@@ -30,6 +36,13 @@ window/stretch/scale_mode="integer"
 [dotnet]
 
 project/assembly_name="Gamedev"
+
+[gui]
+
+theme/default_font_antialiasing=0
+theme/default_font_hinting=2
+theme/default_font_subpixel_positioning=0
+theme/lcd_subpixel_layout=0
 
 [input]
 
@@ -78,6 +91,7 @@ behavior_tree/user_task_dir_1="res://limbo/tasks"
 
 [physics]
 
+2d/run_on_separate_thread=true
 2d/default_gravity=200.0
 
 [rendering]
@@ -85,6 +99,7 @@ behavior_tree/user_task_dir_1="res://limbo/tasks"
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=true
 textures/default_filters/anisotropic_filtering_level=0
 textures/decals/filter=0
 textures/light_projectors/filter=0

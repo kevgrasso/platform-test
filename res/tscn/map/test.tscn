@@ -12,14 +12,14 @@ distance = -194.0
 [node name="Pivot" type="Node2D" parent="."]
 
 [node name="Background Colors" type="ColorRect" parent="Pivot"]
-offset_left = 432.0
-offset_top = 176.0
-offset_right = 512.0
-offset_bottom = 192.0
+offset_left = 448.0
+offset_top = 192.0
+offset_right = 528.0
+offset_bottom = 208.0
 color = Color(0.652789, 7.08485e-05, 0.541714, 1)
 
 [node name="Playfield" type="CanvasGroup" parent="Pivot"]
-position = Vector2(269, 104)
+position = Vector2(285, 120)
 
 [node name="Character Mask" type="TileMapLayer" parent="Pivot/Playfield"]
 clip_children = 1
@@ -35,6 +35,7 @@ offset_top = 64.0
 offset_right = 204.0
 offset_bottom = 80.0
 color = Color(0, 0.227451, 1, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Foreground Colors 2" type="ColorRect" parent="Pivot/Playfield/Character Mask"]
 material = ExtResource("3_5lyyc")
@@ -43,6 +44,7 @@ offset_top = 64.0
 offset_right = 242.0
 offset_bottom = 80.0
 color = Color(0, 1, 0, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="Floor" type="StaticBody2D" parent="Pivot/Playfield"]
 

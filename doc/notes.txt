@@ -1,0 +1,37 @@
+
+FIXME:
+TODO:
+	script for auto wordwrapping text log?
+	script for centering area name according to the tile grid
+	script for auto-scaling window at startup (to round((screen height+1)/(2*360))*360)
+	slopes
+	
+CUT:
+ focus?
+ ladders
+ hanging from ledges
+ p-speed
+ make orientation independent 
+
+inspiration:
+ VVVVVV
+ Donkey Kong for GB
+ Mario 3
+ Wye's Godot Mario World
+ La-Mulana
+ Ultima series
+ zzt/megazeux
+ Castlevania 2?
+ Super Win the Game
+ Rygar
+ Aldo
+ Faxanadu
+ Zelda 2
+ Metroid 1+2
+ Romancia
+ Legacy of the Wizard
+ Sorcerian
+ For Whom the Frog Tolls
+ Link's Awakening
+ Macventure games
+ Ultima

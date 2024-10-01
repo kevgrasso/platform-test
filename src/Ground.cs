@@ -10,7 +10,7 @@ public partial class Ground : LimboState
 	[Export] public float LandingDeaccel = 4.35f;
 	[Export] public float TurnSkidFactor = 0.8f;
 	[Export] public float CoyoteTime = 0.09f;
-	[Export] public float CoyoteGravity = 560.0f;
+	[Export] public float CoyoteGravity = 115.0f;
 	
 	[Export] private Player _body;
 	[Export] private Timer _coyote;

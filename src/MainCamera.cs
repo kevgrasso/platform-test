@@ -4,6 +4,9 @@ public partial class MainCamera : Camera2D {
 	private CockpitHUD _hud;
 
 	public override void _Ready() {
+		int min_w = (int)ProjectSettings.GetSetting("display/window/size/viewport_width");
+		int min_h = (int)ProjectSettings.GetSetting("display/window/size/viewport_height");
+		GetWindow().MinSize = new Vector2I(min_w, min_h);
 		_hud = GetNode<CockpitHUD>("/root/Game/GUILayer/CockpitHUD");
 	}
 

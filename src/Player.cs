@@ -46,11 +46,11 @@ public partial class Player : CharacterBody2D {
 	public override void _PhysicsProcess(double delta) {
 		_hsm.Update(delta);
 
-		_debug.Text = 
-			$"pos: {Position.Round()}\tlast motion: {GetLastMotion().Round()}\n" + 
-			$"cur vel: {GetRealVelocity().Round()}\tprev vel: {GetPositionDelta().Round()}\n" + 
-			$"collision count; {GetSlideCollisionCount()}\n" +
-			$"ceil: {IsOnCeiling()}\tfloor: {IsOnFloor()}\twall: {IsOnWall()}";
+		// _debug.Text = 
+		// 	$"pos: {Position.Round()}\tlast motion: {GetLastMotion().Round()}\n" + 
+		// 	$"cur vel: {GetRealVelocity().Round()}\tprev vel: {GetPositionDelta().Round()}\n" + 
+		// 	$"collision count; {GetSlideCollisionCount()}\n" +
+		// 	$"ceil: {IsOnCeiling()}\tfloor: {IsOnFloor()}\twall: {IsOnWall()}";
 
 
 		//for reference:

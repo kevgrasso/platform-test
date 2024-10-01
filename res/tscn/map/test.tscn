@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=4 uid="uid://c5ckhha3drvt1"]
+
+[ext_resource type="TileSet" uid="uid://d10twc0sxowwx" path="res://res/tres/kenny 1-bit.tres" id="2_w35hb"]
+[ext_resource type="Material" uid="uid://cywdpu7v81itf" path="res://res/tres/textmodefront.tres" id="3_5lyyc"]
+[ext_resource type="PackedScene" uid="uid://3usgh0tm8i6b" path="res://res/tscn/player.tscn" id="3_xtn66"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o6qqx"]
+distance = -194.0
+
+[node name="Map" type="Node2D"]
+
+[node name="Pivot" type="Node2D" parent="."]
+
+[node name="Background Colors" type="ColorRect" parent="Pivot"]
+offset_left = 432.0
+offset_top = 176.0
+offset_right = 512.0
+offset_bottom = 192.0
+color = Color(0.652789, 7.08485e-05, 0.541714, 1)
+
+[node name="Playfield" type="CanvasGroup" parent="Pivot"]
+position = Vector2(269, 104)
+
+[node name="Character Mask" type="TileMapLayer" parent="Pivot/Playfield"]
+clip_children = 1
+position = Vector2(19, 8)
+tile_map_data = PackedByteArray("AAD9/wEAAQAFAAQAAAD+/wEAAQAFAAQAAAD//wEAAQAFAAQAAAD8/wEAAQAFAAQAAAD7/wEAAQAFAAQAAAACAAIAAQAFAAQAAAADAAIAAQAFAAQAAAAEAAIAAQAFAAQAAAAFAAIAAQAFAAQAAAAGAAIAAQAFAAQAAAD+/wUAAQAFAAQAAAD//wUAAQAFAAQAAAAAAAUAAQAFAAQAAAABAAUAAQAFAAQAAAACAAUAAQAFAAQAAADx/wQAAgAFAAcAAADy/wQAAgAFAAcAAADz/wQAAgAFAAcAAAD0/wQAAgAFAAcAAAD2/wUAAgAFAAcAAAD1/wUAAgAFAAcAAAD1/wYAAgAFAAcAAAD0/wYAAgAFAAcAAAD0/wUAAgAFAAcAAAAGAAUAAgAFAAcAAAAHAAUAAgAFAAcAAAAIAAUAAgAFAAcAAAAJAAQAAgAFAAcAAAAKAAQAAgAFAAcAAAALAAQAAgAFAAcAAAAMAAQAAgAFAAcAAAANAAQAAgAFAAcAAAAHAAgAAgAFAAcAAAAGAAgAAgAFAAcAAAAFAAgAAgAFAAcAAAAEAAgAAgAFAAcAAAADAAgAAgAFAAcAAAACAAgAAgAFAAcAAAD3/wEAAgAFAAcAAAD6/wEAAgAFAAcAAAD5/wEAAgAFAAcAAAD4/wEAAgAFAAcAAAD2/wEAAgAFAAcAAAD5/wAAAAALAAsAAAD8/wwAAgAAAAYAAAD8/wsAAAAVAAEAAAD8/woAAAAVAAEAAAD8/wkAAAAVAAEAAAD8/wgAAAAVAAEAAAD8/wcAAAAVAAEAAAD8/wYAAAAVAAEAAAD8/wUAAAAVAAEAAAD8/wQAAAAVAAEAAAD8/wMAAAAVAAEAAAD8/wIAAAAVAAEAAAD8/wAAAAAVAAAAAAD2/wAAAgAMAAMAAAAJAAIAAQAFAAQAAAAMAAIAAQAFAAQAAAAGAAEAAQANAAMAAAD7/wAAAQAPAAMAAAD+/wQAAQAOAAMAAAAEAAMAAgAFABAAAAAEAAQAAgAFABAAAAAEAAUAAgAFABAAAAAEAAYAAgAFABAAAAD2//3/AgAJAAEAAAD1//r/AgAJAAEAAADy//r/AgAJAAEAAADx//r/AgAJAAEAAADw//r/AgAJAAEAAAD3//3/AgAJAAEAAAD4//3/AgAJAAEAAAD5//3/AgAJAAEAAAARAAAAAgAFAAcAAAASAAAAAgAFAAcAAAATAAAAAgAFAAcAAAATAAYAAgAFAAcAAAAUAAYAAgAFAAcAAAARAAQAAgAFAAcAAAASAAQAAgAFAAcAAAAUAAAAAgAFAAcAAAAVAAAAAgAFAAcAAAAVAAYAAgAFAAcAAAAWAAAAAgAFAAcAAAAWAAYAAgAFAAcAAAAXAAYAAgAFAAcAAAAOAAQAAgAFAAcAAAAPAAQAAgAFAAcAAAAQAAQAAgAFAAcAAAA=")
+tile_set = ExtResource("2_w35hb")
+navigation_enabled = false
+
+[node name="Foreground Colors" type="ColorRect" parent="Pivot/Playfield/Character Mask"]
+material = ExtResource("3_5lyyc")
+offset_left = 144.0
+offset_top = 64.0
+offset_right = 204.0
+offset_bottom = 80.0
+color = Color(0, 0.227451, 1, 1)
+
+[node name="Foreground Colors 2" type="ColorRect" parent="Pivot/Playfield/Character Mask"]
+material = ExtResource("3_5lyyc")
+offset_left = 204.0
+offset_top = 64.0
+offset_right = 242.0
+offset_bottom = 80.0
+color = Color(0, 1, 0, 1)
+
+[node name="Floor" type="StaticBody2D" parent="Pivot/Playfield"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivot/Playfield/Floor"]
+shape = SubResource("WorldBoundaryShape2D_o6qqx")
+
+[node name="Player" parent="Pivot/Playfield" instance=ExtResource("3_xtn66")]
+z_index = 2
+position = Vector2(95, -11)
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+offset_right = 480.0
+offset_bottom = 304.0

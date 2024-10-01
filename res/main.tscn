@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://dklm4g65kclcr"]
+
+[ext_resource type="PackedScene" uid="uid://c5ckhha3drvt1" path="res://res/tscn/map/test.tscn" id="1_uk20t"]
+[ext_resource type="PackedScene" uid="uid://bunltxb5wd7ac" path="res://res/tscn/CockpitHUD.tscn" id="2_paib7"]
+[ext_resource type="Script" path="res://res/MainCamera.cs" id="3_a363f"]
+
+[node name="Game" type="Node2D"]
+
+[node name="MainCamera" type="Camera2D" parent="."]
+offset = Vector2(-16, -40)
+anchor_mode = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 6.4
+script = ExtResource("3_a363f")
+
+[node name="Map" parent="." instance=ExtResource("1_uk20t")]
+
+[node name="DebugText" type="RichTextLabel" parent="."]
+unique_name_in_owner = true
+offset_left = -17.0
+offset_top = -27.0
+offset_right = 614.0
+offset_bottom = 39.0
+focus_mode = 2
+bbcode_enabled = true
+fit_content = true
+scroll_following = true
+autowrap_mode = 0
+context_menu_enabled = true
+selection_enabled = true
+
+[node name="GUILayer" type="CanvasLayer" parent="."]
+
+[node name="CockpitHUD" parent="GUILayer" instance=ExtResource("2_paib7")]
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+offset_left = 16.0
+offset_top = 40.0
+offset_right = 496.0
+offset_bottom = 344.0

@@ -1,11 +1,13 @@
 using Godot;
 
 public partial class Player : CharacterBody2D {
-	private Godot.LimboHsm _hsm;
+	private LimboHsm _hsm;
+	private MainCamera _camera;
 	private RichTextLabel _debug;
 	
 	
 	public override void _Ready() {
+		_camera = GetNode<MainCamera>("/root/Game/MainCamera");
 		_debug = GetNode<RichTextLabel>("%DebugText");
 
 		// aquire necessary limboai nodes
@@ -32,7 +34,9 @@ public partial class Player : CharacterBody2D {
 
 	public bool SetAndMove(Vector2 velocity) {
 		Velocity = velocity;
-		return MoveAndSlide();
+		bool result = MoveAndSlide();
+		_camera.PickActiveScreen(GlobalPosition);
+		return result;
 	}
 	
 	public override void _PhysicsProcess(double delta) {

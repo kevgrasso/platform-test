@@ -1,0 +1,127 @@
+[gd_scene load_steps=13 format=3 uid="uid://bunltxb5wd7ac"]
+
+[ext_resource type="FontFile" uid="uid://cemrjdgviv65s" path="res://res/font/UnifontExMono.woff2" id="1_dgx4f"]
+[ext_resource type="FontFile" uid="uid://c78nby4wdj8aq" path="res://res/font/SevenFifteenMonoRounded-Regular.ttf" id="1_kjt6n"]
+[ext_resource type="Script" path="res://src/CockpitHUD.cs" id="1_pi5w6"]
+[ext_resource type="Texture2D" uid="uid://lq1s3gyjyy1g" path="res://res/img/kenny 1-bit platformer monochrome_tilemap_packed.png" id="2_iyu8i"]
+[ext_resource type="FontFile" uid="uid://bj70wjx0ov663" path="res://res/font/Silver.ttf" id="3_56o2l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x802q"]
+bg_color = Color(0.27451, 0.6, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_dus4w"]
+line_spacing = 0.0
+font = ExtResource("1_dgx4f")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hdwp8"]
+texture = ExtResource("2_iyu8i")
+texture_margin_left = 16.0
+texture_margin_top = 16.0
+texture_margin_right = 16.0
+texture_margin_bottom = 16.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(240, 144, 48, 48)
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2osoy"]
+content_margin_left = 4.0
+content_margin_top = 8.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+bg_color = Color(0.211765, 0.14902, 0.654902, 1)
+border_blend = true
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_lig8x"]
+line_spacing = 0.0
+font = ExtResource("1_kjt6n")
+font_size = 20
+shadow_size = 0
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_um2d8"]
+content_margin_bottom = 2.0
+color = Color(1, 1, 1, 1)
+grow_begin = -16.0
+grow_end = -16.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_axhrd"]
+line_spacing = -8.0
+font = ExtResource("3_56o2l")
+font_size = 19
+shadow_size = 0
+
+[node name="CockpitHUD" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+script = ExtResource("1_pi5w6")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(512, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_x802q")
+
+[node name="Area Name" type="Label" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Mario is here "
+label_settings = SubResource("LabelSettings_dus4w")
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="Playfield" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 336)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_hdwp8")
+
+[node name="AperatureRect" type="ReferenceRect" parent="VBoxContainer/Playfield"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Sidebar" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2osoy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Sidebar"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="Title" type="Label" parent="Sidebar/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 15
+text = "Gensou
+World"
+label_settings = SubResource("LabelSettings_lig8x")
+horizontal_alignment = 1
+vertical_alignment = 3
+
+[node name="HSeparator" type="HSeparator" parent="Sidebar/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+theme_override_styles/separator = SubResource("StyleBoxLine_um2d8")
+
+[node name="Text Log" type="Label" parent="Sidebar/VBoxContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Welcome to the amazing world of Touhou!"
+label_settings = SubResource("LabelSettings_axhrd")
+horizontal_alignment = 1
+autowrap_mode = 3

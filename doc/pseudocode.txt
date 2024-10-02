@@ -10,3 +10,15 @@ relative load zone:
 -scene there
 -vector2i offset
 -vector2i[] intersections
+
+
+axis movement:
+-start pos
+-start vel
+-accel
+-decel
+-accel_factor
+-decel_factor
+-terminal vel
+
+new pos = p+vt(f^t)+at^2

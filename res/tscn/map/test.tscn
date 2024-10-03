@@ -9,6 +9,10 @@ distance = -194.0
 
 [node name="Map" type="Node2D"]
 
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+offset_right = 480.0
+offset_bottom = 304.0
+
 [node name="Pivot" type="Node2D" parent="."]
 
 [node name="Background Colors" type="ColorRect" parent="Pivot"]
@@ -55,7 +59,3 @@ shape = SubResource("WorldBoundaryShape2D_o6qqx")
 [node name="Player" parent="Pivot/Playfield" instance=ExtResource("3_xtn66")]
 z_index = 2
 position = Vector2(95, -11)
-
-[node name="ReferenceRect" type="ReferenceRect" parent="."]
-offset_right = 480.0
-offset_bottom = 304.0

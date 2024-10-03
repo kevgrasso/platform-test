@@ -12,13 +12,30 @@ relative load zone:
 -vector2i[] intersections
 
 
-axis movement:
+axis movement queue:
 -start pos
 -start vel
--accel
--decel
--accel_factor
--decel_factor
--terminal vel
+-vel dir (for x axis only)
 
-new pos = p+vt(f^t)+at^2
+axis movement chunk:
+-immediate vel
+-accel
+-jerk (or higher derivative)
+-endpoint vel
+
+a series of these in a queue
+
+new pos = p+vt+at^2+aj^3+...
+
+if 0 is between old pos and new pos:
+    solve for pos and t when v=0
+    0 = v+2at+3jt^2+...
+
+    pos result becomes new starting position value
+    new starting velocity is 0
+    new_pos = mid_pos + new_pos(delta-mid_t)
+
+    same for terminal velocity
+
+Velocity = new_pos - old_pos;
+MoveAndSlide();

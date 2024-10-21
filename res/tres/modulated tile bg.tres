@@ -1,0 +1,22 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cgfduvrjhfp3p"]
+
+[ext_resource type="Texture2D" uid="uid://difl0ils4djdw" path="res://res/img/white tile.png" id="1_qhj88"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_km3tk"]
+texture = ExtResource("1_qhj88")
+0:0/next_alternative_id = 7
+0:0/0 = 0
+0:0/1 = 1
+0:0/2 = 2
+0:0/2/modulate = Color(1, 0.433238, 0.549224, 1)
+0:0/3 = 3
+0:0/3/modulate = Color(0.713726, 1, 0, 1)
+0:0/4 = 4
+0:0/4/modulate = Color(0.113725, 1, 0.768627, 1)
+0:0/5 = 5
+0:0/5/modulate = Color(0, 0, 0, 0)
+0:0/6 = 6
+0:0/6/modulate = Color(0, 0, 0, 1)
+
+[resource]
+sources/1 = SubResource("TileSetAtlasSource_km3tk")

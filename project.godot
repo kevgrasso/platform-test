@@ -17,11 +17,6 @@ config/features=PackedStringArray("4.3", "C#", "GL Compatibility")
 run/max_fps=60
 config/icon="res://res/img/icon.svg"
 
-[debug]
-
-settings/stdout/print_fps=true
-settings/stdout/print_gpu_profile=true
-
 [display]
 
 window/size/viewport_width=640

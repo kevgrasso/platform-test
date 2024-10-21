@@ -1966,10 +1966,6 @@ texture = ExtResource("3_8wemw")
 [resource]
 physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_ktjsc")
-custom_data_layer_0/name = "front"
-custom_data_layer_0/type = 20
-custom_data_layer_1/name = "back"
-custom_data_layer_1/type = 20
 sources/0 = SubResource("TileSetAtlasSource_4obut")
 sources/1 = SubResource("TileSetAtlasSource_sfrnl")
 sources/2 = SubResource("TileSetAtlasSource_aok3f")

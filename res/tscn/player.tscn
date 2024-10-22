@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://3usgh0tm8i6b"]
 
-[ext_resource type="Script" path="res://src/Player.cs" id="1_pbgte"]
+[ext_resource type="Script" path="res://src/player/Player.cs" id="1_pbgte"]
 [ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://res/img/icon.svg" id="2_1jtts"]
 [ext_resource type="Script" path="res://src/Air.cs" id="4_i0amv"]
 [ext_resource type="Script" path="res://src/Ground.cs" id="5_oadae"]

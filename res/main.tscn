@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://c5ckhha3drvt1" path="res://res/tscn/map/test.tscn" id="1_uk20t"]
 [ext_resource type="PackedScene" uid="uid://bunltxb5wd7ac" path="res://res/tscn/CockpitHUD.tscn" id="2_paib7"]
-[ext_resource type="Script" path="res://src/MainCamera.cs" id="3_a363f"]
+[ext_resource type="Script" path="res://src/hud/MainCamera.cs" id="3_a363f"]
 
 [node name="Game" type="Node2D"]
 

@@ -12,6 +12,7 @@ distance = -194.0
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 offset_right = 480.0
 offset_bottom = 304.0
+mouse_filter = 1
 
 [node name="Pivot" type="Node2D" parent="."]
 

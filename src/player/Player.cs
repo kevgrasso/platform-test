@@ -9,6 +9,7 @@ public partial class Player : CharacterBody2D {
 	public override void _Ready() {
 		_camera = GetNode<MainCamera>("/root/Game/MainCamera");
 		_debug = GetNode<RichTextLabel>("%DebugText");
+		InfoManager.RegisterPlayer(this);
 
 		// aquire necessary limboai nodes
 		_hsm = GetNode<LimboHsm>("Assets/PlatformMachine");
@@ -26,16 +27,15 @@ public partial class Player : CharacterBody2D {
 		_hsm.SetActive(true);
 	}
 
-	public float GetInputDirection() {
-		return Mathf.Sign(
-			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
-		);
-	}
-
 	public bool SetAndMove(Vector2 velocity) {
+		// if wall normal  and velocity x axis are opposing directions, cancel x axis movement
+		if (IsOnWall() && Mathf.Sign(GetWallNormal().X * velocity.X) == -1.0f) {
+			velocity.X = 0;
+		}
+
 		Velocity = velocity;
 		bool result = MoveAndSlide();
-		_camera.PickActiveScreen(GlobalPosition);
+		_camera.UpdateActiveBoard(GlobalPosition);
 		return result;
 	}
 	

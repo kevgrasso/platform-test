@@ -2,9 +2,9 @@
 
 [ext_resource type="FontFile" uid="uid://cemrjdgviv65s" path="res://res/font/UnifontExMono.woff2" id="1_dgx4f"]
 [ext_resource type="FontFile" uid="uid://c78nby4wdj8aq" path="res://res/font/SevenFifteenMonoRounded-Regular.ttf" id="1_kjt6n"]
-[ext_resource type="Script" path="res://src/CockpitHUD.cs" id="1_pi5w6"]
 [ext_resource type="Texture2D" uid="uid://lq1s3gyjyy1g" path="res://res/img/kenny 1-bit platformer monochrome_tilemap_packed.png" id="2_iyu8i"]
 [ext_resource type="FontFile" uid="uid://bj70wjx0ov663" path="res://res/font/Silver.ttf" id="3_56o2l"]
+[ext_resource type="Script" path="res://src/hud/ApertureRect.cs" id="3_yha7o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x802q"]
 bg_color = Color(0.27451, 0.6, 1, 1)
@@ -59,7 +59,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
-script = ExtResource("1_pi5w6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 custom_minimum_size = Vector2(512, 0)
@@ -87,11 +86,11 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_hdwp8")
 
 [node name="ApertureRect" type="ReferenceRect" parent="VBoxContainer/Playfield"]
-unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1
 border_color = Color(1, 0, 0, 0)
 border_width = 0.0
+script = ExtResource("3_yha7o")
 
 [node name="Sidebar" type="PanelContainer" parent="."]
 layout_mode = 2

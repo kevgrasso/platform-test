@@ -53,7 +53,7 @@ public partial class Ground : LimboState
 		float deltaf = (float)delta;
 		
 		// init movement vars
-		float direction = _body.GetInputDirection();
+		float direction = InfoManager.GetInputDirection();
 		Vector2 frame_vel = _body.Velocity;
 		if (_body.IsOnFloor()) {
 			// indicate player can jump by readying coyote timer

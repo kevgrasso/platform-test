@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- using Godot;
- using System;
-using System.Numerics;
+using Godot;
 
 // Field-of-vision calculation for a simple tiled map.
 

@@ -39,3 +39,4 @@ offset_left = 16.0
 offset_top = 40.0
 offset_right = 496.0
 offset_bottom = 344.0
+mouse_filter = 1

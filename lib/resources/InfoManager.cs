@@ -12,6 +12,10 @@ using Godot;
 		_aperture = aperture;
 	}
 
+	static public Vector2 GetPlayerPos() {
+		return _player.GlobalPosition;
+	}
+
 	static public Vector2I GetPlayerCell(Vector2 grid_offset, Vector2 cell_size) {
 		return (Vector2I)((grid_offset+_player.GlobalPosition)/cell_size).Floor();
 	}

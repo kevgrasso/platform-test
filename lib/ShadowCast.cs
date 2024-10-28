@@ -32,7 +32,7 @@ using Godot;
 public interface ICellGrid {
     public Vector2I Dim { get; }
 
-    public bool IsWall(Vector2I coords);
+    public bool IsOpaque(Vector2I coords);
     void SetLight(Vector2I coords);
 }
 
@@ -167,7 +167,7 @@ public interface ICellGrid {
                 // This cell is visible
                 grid.SetLight(gridPos); 
 
-                bool curBlocked = grid.IsWall(gridPos);
+                bool curBlocked = grid.IsOpaque(gridPos);
                 if (prevWasBlocked) {
                     if (curBlocked) {
                         // Still traversing a column of walls.

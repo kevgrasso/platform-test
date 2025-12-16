@@ -21,4 +21,6 @@
 *.godot filter=lfs diff=lfs merge=lfs -text
 *.txt filter=lfs diff=lfs merge=lfs -text
 *.woff2 filter=lfs diff=lfs merge=lfs -text
+*.1 filter=lfs diff=lfs merge=lfs -text
+*.uid filter=lfs diff=lfs merge=lfs -text
 * !text !filter !merge !diff

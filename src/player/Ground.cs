@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Ground : LimboState
+public partial class Ground
 {
 	// exposed godot inspector parameter "constants"
 	[Export] public float GroundAccel = 5.0f;
@@ -33,7 +33,7 @@ public partial class Ground : LimboState
 		}
 	}
 	
-	public override void _Enter() {
+	public  void _Enter() {
 		GD.Print("feet enabled");
 		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
 		_coyote.Start(CoyoteTime);
@@ -41,7 +41,7 @@ public partial class Ground : LimboState
 		// dampen landing velocity if held direction isn't forward
 		_is_landing_stop = true;
 	}
-	public override void _Exit() {
+	public  void _Exit() {
 		GD.Print("feet disabled");
 		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 		_coyote.Stop();
@@ -49,7 +49,7 @@ public partial class Ground : LimboState
 	
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Update(double delta) {
+	public  void _Update(double delta) {
 		float deltaf = (float)delta;
 		
 		// init movement vars

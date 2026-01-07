@@ -1,9 +1,143 @@
-[gd_scene load_steps=9 format=3 uid="uid://3usgh0tm8i6b"]
+[gd_scene load_steps=14 format=3 uid="uid://3usgh0tm8i6b"]
 
-[ext_resource type="Script" path="res://src/player/Player.cs" id="1_pbgte"]
+[ext_resource type="Script" uid="uid://cte6e4w5xp2yq" path="res://src/player/Player.cs" id="1_pbgte"]
 [ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://res/img/icon.svg" id="2_1jtts"]
-[ext_resource type="Script" path="res://src/player/Air.cs" id="4_i0amv"]
-[ext_resource type="Script" path="res://src/player/Ground.cs" id="5_oadae"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_nsr2n"]
+[ext_resource type="Script" uid="uid://do6qrhe0vu7kb" path="res://src/player/Air.cs" id="4_i0amv"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_lb5nn"]
+[ext_resource type="Script" uid="uid://bskji8roaahnp" path="res://src/player/Ground.cs" id="5_oadae"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_q6d88"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_rjcp7"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_nsr2n"]
+script/source = "using Godot;
+using System;
+using System.Reflection;
+
+public partial class Air : Node {
+	// exposed godot inspector parameter \"constants\"
+	[Export] public float StandardAccel = 2.65f;
+	[Export] public float TurningAccel = 0.5f;
+	[Export] public float DirThreshold = 49.893f;
+	[Export] public float GravityThreshold = 30.0f;
+	[Export] public float MaxSpeed = 130.0f;
+	[Export] public float BaseJumpVelocity = 140.0f;
+	[Export] public float SpeedJumpVelBonus = 0.15f;
+	[Export] public float NormalGravity = 705.0f;
+	[Export] public float JumpFloatGravity = 200.0f;
+	[Export] public float FallFloatGravity = 235.0f; 
+	[Export] public float JumpCancelFactor = 0.75f;
+	[Export] public float JumpBufferTime = 0.09f;
+	
+	// godot nodes
+	[Export] private Player _body;
+	[Export] private Timer _buffer;
+
+	// jump modulation vars
+	private float _jump_direction = 0.0f;
+	private bool _is_floating_jump = false;
+
+	public bool OnJumped() {
+			GD.Print($\"OnJumped event\");
+			_is_floating_jump = true;
+			return false;
+	}
+
+	// Called when the fsm is being initialized
+	public override void _Setup() {
+		AddEventHandler(\"buffered jump\", Callable.From(OnJumped));
+		AddEventHandler(\"grounded\", Callable.From(() => _is_floating_jump = false));
+	}
+
+	public override void _Enter() {
+		if (_is_floating_jump) {
+			// jump setup
+			float up = _body.UpDirection.Y;
+			float jump_velocity = up * BaseJumpVelocity;
+			jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
+			_body.Velocity = new Vector2(_body.Velocity.X, jump_velocity);
+			_jump_direction = 0.0f; //reset
+			GD.Print($\"jump body vel: {_body.Velocity.Y}\");
+		} else {
+			_buffer.Stop();
+			// no jump
+			GD.Print($\"no jump body vel: {_body.Velocity.Y}\");
+		}
+	}
+
+	private float GetGravity() {
+		if (_is_floating_jump) {
+			if (_body.Velocity.Y < 0) {
+				return JumpFloatGravity;
+			} else {
+				return FallFloatGravity;
+			} 
+		} else {
+			// jump input released
+			return NormalGravity;
+		}
+	}
+
+	private float GetAccel() {
+		// if moving the opposite direction to the start of the jump and aren't falling too fast
+		if ((_body.Velocity.X * _jump_direction) < 0 && _body.Velocity.Y < GravityThreshold) {
+			// backwards jump case--nerf acceleration
+			return TurningAccel;
+		} else {
+			// standard jump case
+			return StandardAccel;
+		}
+	}
+	
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Update(double delta) {
+		float deltaf = (float)delta;
+		
+		Vector2 frame_vel = _body.Velocity;
+		if (Input.IsActionJustPressed(\"jump\")) {
+			// mark that player asked for a jump
+			_buffer.Start(JumpBufferTime); 
+		} else if (Input.IsActionJustReleased(\"jump\")) {
+			if (_is_floating_jump && _body.Velocity.Y < 0) {
+				// truncate jump
+				frame_vel.Y *= JumpCancelFactor;
+			}
+			
+			// cancel jump actions
+			_is_floating_jump = false; 
+			_buffer.Stop();
+		}
+		
+		//check if a state transition is necessary
+		if (_body.IsOnFloor() && _body.Velocity.Y >= 0) {
+			if (!_buffer.IsStopped()) {
+				Dispatch(\"buffered jump\");
+			} else {
+				Dispatch(\"grounded\");
+			}
+		}
+		
+		// apply gravity
+		if (_body.IsOnCeiling() && _body.Velocity.Y < 0) {
+			frame_vel = frame_vel.Reflect(_body.UpDirection.Orthogonal());
+		} else {
+			frame_vel.Y -= _body.UpDirection.Y * GetGravity() * deltaf;
+		}
+
+		// calculate the movement
+		float direction = InfoManager.GetInputDirection();
+		if (_jump_direction == 0 && Mathf.Abs(_body.Velocity.X) > DirThreshold) {
+			_jump_direction = Mathf.Sign(_body.Velocity.X);
+			GD.Print($\"x vel: {_body.Velocity.X}; jump dir: {_jump_direction}; {_body.Velocity.X * _jump_direction}\");
+		}
+
+		float oriented_max_speed = direction * MaxSpeed;
+		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, GetAccel());
+		
+		_body.SetAndMove(frame_vel);
+	}
+}
+"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
 radius = 3.0
@@ -28,15 +162,60 @@ position = Vector2(-1.19209e-07, 0.5)
 scale = Vector2(0.125, 0.242188)
 texture = ExtResource("2_1jtts")
 
+[node name="Air" type="Node" parent="Assets" node_paths=PackedStringArray("_body", "_buffer")]
+script = ExtResource("4_i0amv")
+_body = NodePath("../..")
+_buffer = NodePath("../JumpBuffer")
+
+[node name="Ground" type="Node" parent="Assets" node_paths=PackedStringArray("_body", "_coyote", "_feet")]
+script = ExtResource("5_oadae")
+_body = NodePath("../..")
+_coyote = NodePath("../CoyoteTimer")
+_feet = NodePath("../../RetractableFeet")
+
+[node name="StateChart" type="Node" parent="Assets"]
+script = ExtResource("3_nsr2n")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="Assets/StateChart"]
+script = ExtResource("4_lb5nn")
+initial_state = NodePath("Air")
+metadata/_custom_type_script = "uid://jk2jm1g6q853"
+
+[node name="Air" type="Node" parent="Assets/StateChart/Root"]
+script = ExtResource("5_q6d88")
+metadata/_custom_type_script = "uid://cytafq8i1y8qm"
+
+[node name="Buffered Jump" type="Node" parent="Assets/StateChart/Root/Air"]
+script = ExtResource("6_rjcp7")
+to = NodePath("..")
+delay_in_seconds = "0.0"
+
+[node name="Grounded" type="Node" parent="Assets/StateChart/Root/Air"]
+script = ExtResource("6_rjcp7")
+to = NodePath("../../Ground")
+delay_in_seconds = "0.0"
+metadata/_custom_type_script = "uid://cf1nsco3w0mf6"
+
+[node name="Ground" type="Node" parent="Assets/StateChart/Root"]
+script = ExtResource("5_q6d88")
+metadata/_custom_type_script = "uid://cytafq8i1y8qm"
+
+[node name="Airbourne" type="Node" parent="Assets/StateChart/Root/Ground"]
+script = ExtResource("6_rjcp7")
+to = NodePath("../../Air")
+delay_in_seconds = "0.0"
+
 [node name="PlatformMachine" type="LimboHSM" parent="Assets"]
+process_mode = 4
+physics_interpolation_mode = 2
+auto_translate_mode = 2
 update_mode = 2
 
-[node name="Air" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_buffer")]
-script = ExtResource("4_i0amv")
-_body = NodePath("../../..")
-_buffer = NodePath("../../JumpBuffer")
+[node name="AirOld" type="LimboState" parent="Assets/PlatformMachine"]
+script = SubResource("CSharpScript_nsr2n")
 
-[node name="Ground" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_coyote", "_feet")]
+[node name="GroundOld" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_coyote", "_feet")]
 script = ExtResource("5_oadae")
 _body = NodePath("../../..")
 _coyote = NodePath("../../CoyoteTimer")
@@ -100,4 +279,11 @@ scale = Vector2(0.718, 1)
 shape = SubResource("RectangleShape2D_fg58r")
 disabled = true
 
-[connection signal="Jumped" from="Assets/PlatformMachine/Ground" to="Assets/PlatformMachine/Air" method="OnJumped"]
+[connection signal="state_entered" from="Assets/StateChart/Root/Air" to="Assets/Air" method="_Enter"]
+[connection signal="state_processing" from="Assets/StateChart/Root/Air" to="Assets/Air" method="_Update"]
+[connection signal="taken" from="Assets/StateChart/Root/Air/Buffered Jump" to="Assets/Air" method="OnJumped"]
+[connection signal="state_entered" from="Assets/StateChart/Root/Ground" to="Assets/Ground" method="_Enter"]
+[connection signal="state_exited" from="Assets/StateChart/Root/Ground" to="Assets/Ground" method="_Exit"]
+[connection signal="state_physics_processing" from="Assets/StateChart/Root/Ground" to="Assets/Ground" method="_Update"]
+[connection signal="taken" from="Assets/StateChart/Root/Ground/Airbourne" to="Assets/Air" method="OnJumped"]
+[connection signal="Jumped" from="Assets/PlatformMachine/GroundOld" to="Assets/PlatformMachine/AirOld" method="OnJumped"]

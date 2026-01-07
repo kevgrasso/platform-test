@@ -1,8 +1,7 @@
 using Godot;
-using System;
-using System.Reflection;
+using GodotStateCharts;
 
-public partial class Air : LimboState {
+public partial class Air : Node {
 	// exposed godot inspector parameter "constants"
 	[Export] public float StandardAccel = 2.65f;
 	[Export] public float TurningAccel = 0.5f;
@@ -31,13 +30,18 @@ public partial class Air : LimboState {
 			return false;
 	}
 
-	// Called when the fsm is being initialized
-	public override void _Setup() {
-		AddEventHandler("buffered jump", Callable.From(OnJumped));
-		AddEventHandler("grounded", Callable.From(() => _is_floating_jump = false));
+	public override void _Ready()
+	{
+		StateChart.Of(GetNode("./StateChart"));
 	}
 
-	public override void _Enter() {
+	// Called when the fsm is being initialized
+	// public void _Setup() {
+	// 	AddEventHandler("buffered jump", Callable.From(OnJumped));
+	// 	AddEventHandler("grounded", Callable.From(() => _is_floating_jump = false));
+	// }
+
+	public  void _Enter() {
 		if (_is_floating_jump) {
 			// jump setup
 			float up = _body.UpDirection.Y;
@@ -78,7 +82,7 @@ public partial class Air : LimboState {
 	}
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Update(double delta) {
+	public void _Update(double delta) {
 		float deltaf = (float)delta;
 		
 		Vector2 frame_vel = _body.Velocity;

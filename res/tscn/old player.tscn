@@ -1,0 +1,101 @@
+[gd_scene load_steps=9 format=3 uid="uid://dktba6urc3d6p"]
+
+[ext_resource type="Script" uid="uid://cte6e4w5xp2yq" path="res://src/player/old/OldPlayer.cs" id="1_oga4y"]
+[ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://res/img/icon.svg" id="2_buen6"]
+[ext_resource type="Script" uid="uid://do6qrhe0vu7kb" path="res://src/player/old/Air.cs" id="3_2vc4h"]
+[ext_resource type="Script" uid="uid://bskji8roaahnp" path="res://src/player/old/Ground.cs" id="4_4vhqe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
+radius = 3.0
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_gs7ls"]
+length = 13.0
+
+[sub_resource type="SeparationRayShape2D" id="SeparationRayShape2D_virfy"]
+length = 8.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fg58r"]
+size = Vector2(8, 10)
+
+[node name="Player" type="CharacterBody2D"]
+floor_constant_speed = true
+script = ExtResource("1_oga4y")
+
+[node name="Assets" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Assets"]
+position = Vector2(-1.19209e-07, 0.5)
+scale = Vector2(0.125, 0.242188)
+texture = ExtResource("2_buen6")
+
+[node name="PlatformMachine" type="LimboHSM" parent="Assets"]
+update_mode = 2
+
+[node name="Air" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_buffer")]
+script = ExtResource("3_2vc4h")
+_body = NodePath("../../..")
+_buffer = NodePath("../../JumpBuffer")
+
+[node name="Ground" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_coyote", "_feet")]
+script = ExtResource("4_4vhqe")
+_body = NodePath("../../..")
+_coyote = NodePath("../../CoyoteTimer")
+_feet = NodePath("../../../RetractableFeet")
+
+[node name="JumpBuffer" type="Timer" parent="Assets"]
+editor_description = "should process callback be idle so speedrunners can buffer jumps or physics to prevent cheating?"
+wait_time = 0.1
+one_shot = true
+
+[node name="CoyoteTimer" type="Timer" parent="Assets"]
+editor_description = "should process callback be physics so speedrunners can buffer jumps or idle to prevent cheating?"
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
+[node name="Core" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_gwl27")
+
+[node name="PushCeiling" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+rotation = 3.14159
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushRightWall-Top" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+position = Vector2(0, -4)
+rotation = -1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+one_way_collision_margin = 0.0
+
+[node name="PushRightWall-Bottom" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+position = Vector2(0, 4)
+rotation = 4.71239
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushLeftWall-Top" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
+position = Vector2(0, -4)
+rotation = 1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
+position = Vector2(0, 4)
+rotation = 1.5708
+shape = SubResource("SeparationRayShape2D_virfy")
+
+[node name="PushFloor-Left" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(-4, 3)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Center" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(0, 3)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="PushFloor-Right" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(4, 3)
+shape = SubResource("SeparationRayShape2D_gs7ls")
+
+[node name="RetractableFeet" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+position = Vector2(0, 11)
+scale = Vector2(0.718, 1)
+shape = SubResource("RectangleShape2D_fg58r")
+disabled = true

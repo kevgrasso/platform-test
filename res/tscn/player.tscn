@@ -1,9 +1,33 @@
-[gd_scene load_steps=9 format=3 uid="uid://3usgh0tm8i6b"]
+[gd_scene load_steps=17 format=3 uid="uid://3usgh0tm8i6b"]
 
-[ext_resource type="Script" path="res://src/player/Player.cs" id="1_pbgte"]
+[ext_resource type="Script" uid="uid://0stp6bfq4icy" path="res://src/player/Player.cs" id="1_pbgte"]
 [ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://res/img/icon.svg" id="2_1jtts"]
-[ext_resource type="Script" path="res://src/player/Air.cs" id="4_i0amv"]
-[ext_resource type="Script" path="res://src/player/Ground.cs" id="5_oadae"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="2_irtkb"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="3_dj11u"]
+[ext_resource type="Script" uid="uid://c1vp0ojjvaby1" path="res://addons/godot_state_charts/parallel_state.gd" id="4_nsr2n"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_lb5nn"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_lb5nn"]
+[ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="8_nsr2n"]
+
+[sub_resource type="Resource" id="Resource_lb5nn"]
+script = ExtResource("8_nsr2n")
+expression = ""
+metadata/_custom_type_script = "uid://le5w1cm0ul8p"
+
+[sub_resource type="Resource" id="Resource_q6d88"]
+script = ExtResource("8_nsr2n")
+expression = ""
+metadata/_custom_type_script = "uid://le5w1cm0ul8p"
+
+[sub_resource type="Resource" id="Resource_rjcp7"]
+script = ExtResource("8_nsr2n")
+expression = ""
+metadata/_custom_type_script = "uid://le5w1cm0ul8p"
+
+[sub_resource type="Resource" id="Resource_040dy"]
+script = ExtResource("8_nsr2n")
+expression = ""
+metadata/_custom_type_script = "uid://le5w1cm0ul8p"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
 radius = 3.0
@@ -21,37 +45,174 @@ size = Vector2(8, 10)
 floor_constant_speed = true
 script = ExtResource("1_pbgte")
 
-[node name="Assets" type="Node2D" parent="."]
-
-[node name="Sprite2D" type="Sprite2D" parent="Assets"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-1.19209e-07, 0.5)
 scale = Vector2(0.125, 0.242188)
 texture = ExtResource("2_1jtts")
 
-[node name="PlatformMachine" type="LimboHSM" parent="Assets"]
-update_mode = 2
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_irtkb")
+metadata/_custom_type_script = "uid://couw105c3bde4"
 
-[node name="Air" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_buffer")]
-script = ExtResource("4_i0amv")
-_body = NodePath("../../..")
-_buffer = NodePath("../../JumpBuffer")
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("3_dj11u")
+initial_state = NodePath("Airbourne")
 
-[node name="Ground" type="LimboState" parent="Assets/PlatformMachine" node_paths=PackedStringArray("_body", "_coyote", "_feet")]
-script = ExtResource("5_oadae")
-_body = NodePath("../../..")
-_coyote = NodePath("../../CoyoteTimer")
-_feet = NodePath("../../../RetractableFeet")
+[node name="Gounded" type="Node" parent="StateChart/Root"]
+script = ExtResource("3_dj11u")
+initial_state = NodePath("Stable")
 
-[node name="JumpBuffer" type="Timer" parent="Assets"]
-editor_description = "should process callback be idle so speedrunners can buffer jumps or physics to prevent cheating?"
-wait_time = 0.1
-one_shot = true
+[node name="Stable" type="Node" parent="StateChart/Root/Gounded"]
+script = ExtResource("5_lb5nn")
 
-[node name="CoyoteTimer" type="Timer" parent="Assets"]
-editor_description = "should process callback be physics so speedrunners can buffer jumps or idle to prevent cheating?"
-process_callback = 0
-wait_time = 0.1
-one_shot = true
+[node name="OnFall" type="Node" parent="StateChart/Root/Gounded/Stable"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../CoyoteTime")
+event = &"Fall"
+delay_in_seconds = "0.0"
+
+[node name="CoyoteTime" type="Node" parent="StateChart/Root/Gounded"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnLanding" type="Node" parent="StateChart/Root/Gounded/CoyoteTime"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Stable")
+event = &"Landing"
+delay_in_seconds = "0.0"
+
+[node name="Timeout" type="Node" parent="StateChart/Root/Gounded/CoyoteTime"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../../Airbourne/Vertical/Fall/QuickFall")
+delay_in_seconds = "0.09"
+
+[node name="OnJump" type="Node" parent="StateChart/Root/Gounded"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Airbourne/Vertical/JumpRise")
+event = &"Jump"
+delay_in_seconds = "0.0"
+
+[node name="Airbourne" type="Node" parent="StateChart/Root"]
+script = ExtResource("4_nsr2n")
+
+[node name="Vertical" type="Node" parent="StateChart/Root/Airbourne"]
+script = ExtResource("3_dj11u")
+initial_state = NodePath("Fall")
+
+[node name="JumpRise" type="Node" parent="StateChart/Root/Airbourne/Vertical"]
+script = ExtResource("5_lb5nn")
+
+[node name="AtPeak" type="Node" parent="StateChart/Root/Airbourne/Vertical/JumpRise"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Fall/SlowFall")
+guard = SubResource("Resource_lb5nn")
+delay_in_seconds = "0.0"
+
+[node name="OnJumpCancel" type="Node" parent="StateChart/Root/Airbourne/Vertical/JumpRise"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../JumpBrake")
+event = &"JumpCancel"
+delay_in_seconds = "0.0"
+
+[node name="JumpBrake" type="Node" parent="StateChart/Root/Airbourne/Vertical"]
+script = ExtResource("5_lb5nn")
+
+[node name="AtPeak" type="Node" parent="StateChart/Root/Airbourne/Vertical/JumpBrake"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Fall/QuickFall")
+guard = SubResource("Resource_q6d88")
+delay_in_seconds = "0.0"
+
+[node name="Fall" type="Node" parent="StateChart/Root/Airbourne/Vertical"]
+script = ExtResource("3_dj11u")
+initial_state = NodePath("QuickFall")
+
+[node name="SlowFall" type="Node" parent="StateChart/Root/Airbourne/Vertical/Fall"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnJumpCancel" type="Node" parent="StateChart/Root/Airbourne/Vertical/Fall/SlowFall"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../QuickFall")
+event = &"JumpCancel"
+delay_in_seconds = "0.0"
+
+[node name="QuickFall" type="Node" parent="StateChart/Root/Airbourne/Vertical/Fall"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnLanding" type="Node" parent="StateChart/Root/Airbourne/Vertical/Fall"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../../../Gounded/Stable")
+event = &"Landing"
+delay_in_seconds = "0.0"
+
+[node name="Horizontal" type="Node" parent="StateChart/Root/Airbourne"]
+script = ExtResource("3_dj11u")
+initial_state = NodePath("Neutral")
+
+[node name="Neutral" type="Node" parent="StateChart/Root/Airbourne/Horizontal"]
+script = ExtResource("5_lb5nn")
+
+[node name="AtLeft" type="Node" parent="StateChart/Root/Airbourne/Horizontal/Neutral"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Left")
+guard = SubResource("Resource_rjcp7")
+delay_in_seconds = "0.0"
+
+[node name="AtRight" type="Node" parent="StateChart/Root/Airbourne/Horizontal/Neutral"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Right")
+guard = SubResource("Resource_040dy")
+delay_in_seconds = "0.0"
+
+[node name="Left" type="Node" parent="StateChart/Root/Airbourne/Horizontal"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnLanding" type="Node" parent="StateChart/Root/Airbourne/Horizontal/Left"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Neutral")
+event = &"Landing"
+delay_in_seconds = "0.0"
+
+[node name="Right" type="Node" parent="StateChart/Root/Airbourne/Horizontal"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnLanding" type="Node" parent="StateChart/Root/Airbourne/Horizontal/Right"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Neutral")
+event = &"Landing"
+delay_in_seconds = "0.0"
+
+[node name="Buffer" type="Node" parent="StateChart/Root/Airbourne"]
+script = ExtResource("3_dj11u")
+initial_state = NodePath("Nothing")
+
+[node name="Nothing" type="Node" parent="StateChart/Root/Airbourne/Buffer"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnJump" type="Node" parent="StateChart/Root/Airbourne/Buffer/Nothing"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Jump")
+event = &"Jump"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/Root/Airbourne/Buffer"]
+script = ExtResource("5_lb5nn")
+
+[node name="OnJumpCancel" type="Node" parent="StateChart/Root/Airbourne/Buffer/Jump"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Nothing")
+event = &"JumpCancel"
+delay_in_seconds = "0.0"
+
+[node name="OnLanding" type="Node" parent="StateChart/Root/Airbourne/Buffer/Jump"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../../Vertical/JumpRise")
+event = &"Landing"
+delay_in_seconds = "0.0"
+
+[node name="Timeout" type="Node" parent="StateChart/Root/Airbourne/Buffer/Jump"]
+script = ExtResource("6_lb5nn")
+to = NodePath("../../Nothing")
+delay_in_seconds = "0.09"
 
 [node name="Core" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_gwl27")
@@ -99,5 +260,3 @@ position = Vector2(0, 11)
 scale = Vector2(0.718, 1)
 shape = SubResource("RectangleShape2D_fg58r")
 disabled = true
-
-[connection signal="Jumped" from="Assets/PlatformMachine/Ground" to="Assets/PlatformMachine/Air" method="OnJumped"]

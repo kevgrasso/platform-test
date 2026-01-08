@@ -1,46 +1,61 @@
-[gd_scene load_steps=6 format=4 uid="uid://c5ckhha3drvt1"]
+[gd_scene load_steps=8 format=4 uid="uid://c5ckhha3drvt1"]
 
+[ext_resource type="Script" uid="uid://lekae33rlxoq" path="res://src/map/MapManager.cs" id="1_41yut"]
 [ext_resource type="TileSet" uid="uid://cgfduvrjhfp3p" path="res://res/tres/modulated tile bg.tres" id="1_oym4t"]
 [ext_resource type="TileSet" uid="uid://d10twc0sxowwx" path="res://res/tres/kenny 1-bit.tres" id="2_w35hb"]
-[ext_resource type="PackedScene" uid="uid://3usgh0tm8i6b" path="res://res/tscn/player.tscn" id="3_xtn66"]
+[ext_resource type="PackedScene" path="res://res/tscn/player.tscn" id="3_xtn66"]
 [ext_resource type="TileSet" uid="uid://bfx10tndhekm3" path="res://res/tres/modulated tile fg.tres" id="4_b8wg6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o6qqx"]
 distance = -194.0
 
-[node name="Map" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xi0cm"]
+size = Vector2(20, 133.18898)
+
+[node name="MapManager" type="Node2D"]
+script = ExtResource("1_41yut")
 
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 offset_right = 480.0
 offset_bottom = 304.0
 mouse_filter = 1
 
-[node name="Pivot" type="Node2D" parent="."]
-
-[node name="Player" parent="Pivot" instance=ExtResource("3_xtn66")]
+[node name="Player" parent="." instance=ExtResource("3_xtn66")]
 z_index = 2
 position = Vector2(187, 59)
+floor_snap_length = 16.0
 
-[node name="Background Tint" type="TileMapLayer" parent="Pivot"]
+[node name="Background Tint" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAAKAAkAAQAAAAAAAQALAAkAAQAAAAAAAQAMAAkAAQAAAAAAAQANAAkAAQAAAAAAAQAOAAkAAQAAAAAAAAAPAAkAAQAAAAAAAAAQAAkAAQAAAAAAAAARAAkAAQAAAAAAAAASAAkAAQAAAAAAAAAHAAwAAQAAAAAAAgAGAAwAAQAAAAAAAgAFAAwAAQAAAAAAAgAEAAwAAQAAAAAAAgAHAA0AAQAAAAAABAAIAA0AAQAAAAAABAAJAA0AAQAAAAAABAADAAIAAQAAAAAABAAEAAIAAQAAAAAABAAFAAIAAQAAAAAABAAIAAIAAQAAAAAABAAJAAUAAQAAAAAABAAKAAUAAQAAAAAABAALAAUAAQAAAAAABAAMAAUAAQAAAAAABAAbAA0AAQAAAAAABgAaAA0AAQAAAAAABgAZAA0AAQAAAAAABgA=")
 tile_set = ExtResource("1_oym4t")
+collision_enabled = false
 
-[node name="Character Mask" type="TileMapLayer" parent="Pivot"]
+[node name="Foreground Tint" type="TileMapLayer" parent="."]
+position = Vector2(304, 128)
+tile_map_data = PackedByteArray("AAD3/wEAAAAAAAAAAgD4/wEAAAAAAAAAAgD5/wEAAAAAAAAAAwD6/wEAAAAAAAAAAwD2/wEAAAAAAAAAAgD7/wEAAAAAAAAAAwD8/wEAAAAAAAAAAwD9/wEAAAAAAAAAAwD+/wEAAAAAAAAAAwD//wEAAAAAAAAAAwAJAAQAAAAAAAAABAAKAAQAAAAAAAAABAALAAQAAAAAAAAABAAMAAQAAAAAAAAABAANAAQAAAAAAAAABAAOAAQAAAAAAAAABAA=")
+tile_set = ExtResource("4_b8wg6")
+collision_enabled = false
+navigation_enabled = false
+
+[node name="Character Mask" type="TileMapLayer" parent="."]
 clip_children = 1
 position = Vector2(304, 128)
 tile_map_data = PackedByteArray("AAD9/wEAAQAFAAQAAAD+/wEAAQAFAAQAAAD//wEAAQAFAAQAAAD8/wEAAQAFAAQAAAD7/wEAAQAFAAQAAAACAAIAAQAFAAQAAAADAAIAAQAFAAQAAAAEAAIAAQAFAAQAAAAFAAIAAQAFAAQAAAAGAAIAAQAFAAQAAAD+/wUAAQAFAAQAAAD//wUAAQAFAAQAAAAAAAUAAQAFAAQAAAABAAUAAQAFAAQAAAACAAUAAQAFAAQAAADx/wQAAgAFAAcAAADy/wQAAgAFAAcAAADz/wQAAgAFAAcAAAD0/wQAAgAFAAcAAAD2/wUAAgAFAAcAAAD1/wUAAgAFAAcAAAD1/wYAAgAFAAcAAAD0/wYAAgAFAAcAAAD0/wUAAgAFAAcAAAAGAAUAAgAFAAcAAAAHAAUAAgAFAAcAAAAIAAUAAgAFAAcAAAAJAAQAAgAFAAcAAAAKAAQAAgAFAAcAAAALAAQAAgAFAAcAAAAMAAQAAgAFAAcAAAANAAQAAgAFAAcAAAAHAAgAAgAFAAcAAAAGAAgAAgAFAAcAAAAFAAgAAgAFAAcAAAAEAAgAAgAFAAcAAAADAAgAAgAFAAcAAAACAAgAAgAFAAcAAAD3/wEAAgAFAAcAAAD6/wEAAgAFAAcAAAD5/wEAAgAFAAcAAAD4/wEAAgAFAAcAAAD2/wEAAgAFAAcAAAD5/wAAAAALAAsAAAD8/woAAgAAAAYAAAD8/wkAAAAVAAEAAAD8/wgAAAAVAAEAAAD8/wcAAAAVAAEAAAD8/wYAAAAVAAEAAAD8/wUAAAAVAAEAAAD8/wQAAAAVAAEAAAD8/wMAAAAVAAEAAAD8/wIAAAAVAAEAAAD8/wAAAAAVAAAAAAD2/wAAAgAMAAMAAAAJAAIAAQAFAAQAAAAMAAIAAQAFAAQAAAAGAAEAAQANAAMAAAD7/wAAAQAPAAMAAAD+/wQAAQAOAAMAAAAEAAMAAgAFABAAAAAEAAQAAgAFABAAAAAEAAUAAgAFABAAAAAEAAYAAgAFABAAAAD2//3/AgAJAAEAAAD1//r/AgAJAAEAAADy//r/AgAJAAEAAADx//r/AgAJAAEAAADw//r/AgAJAAEAAAD3//3/AgAJAAEAAAD4//3/AgAJAAEAAAD5//3/AgAJAAEAAAARAAAAAgAFAAcAAAASAAAAAgAFAAcAAAATAAAAAgAFAAcAAAATAAYAAgAFAAcAAAAUAAYAAgAFAAcAAAARAAQAAgAFAAcAAAASAAQAAgAFAAcAAAAUAAAAAgAFAAcAAAAVAAAAAgAFAAcAAAAVAAYAAgAFAAcAAAAWAAAAAgAFAAcAAAAWAAYAAgAFAAcAAAAXAAYAAgAFAAcAAAAOAAQAAgAFAAcAAAAPAAQAAgAFAAcAAAAQAAQAAgAFAAcAAAA=")
 tile_set = ExtResource("2_w35hb")
+collision_visibility_mode = 1
 navigation_enabled = false
 
-[node name="Foreground Tint" type="TileMapLayer" parent="Pivot"]
-visible = false
-position = Vector2(304, 128)
-tile_map_data = PackedByteArray("AAD3/wEAAAAAAAAAAgD4/wEAAAAAAAAAAgD5/wEAAAAAAAAAAwD6/wEAAAAAAAAAAwD2/wEAAAAAAAAAAgD7/wEAAAAAAAAAAwD8/wEAAAAAAAAAAwD9/wEAAAAAAAAAAwD+/wEAAAAAAAAAAwD//wEAAAAAAAAAAwAJAAQAAAAAAAAABAAKAAQAAAAAAAAABAALAAQAAAAAAAAABAAMAAQAAAAAAAAABAANAAQAAAAAAAAABAAOAAQAAAAAAAAABAA=")
-tile_set = ExtResource("4_b8wg6")
-
-[node name="Floor" type="StaticBody2D" parent="Pivot"]
+[node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(285, 120)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivot/Floor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
 position = Vector2(0, -10)
 shape = SubResource("WorldBoundaryShape2D_o6qqx")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(443, 63.999985)
+rotation = 0.9704031
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_xi0cm")

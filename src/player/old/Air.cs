@@ -4,8 +4,8 @@ using System.Reflection;
 
 public partial class Air : LimboState {
 	// exposed godot inspector parameter "constants"
-	[Export] public float StandardAccel = 2.65f;
-	[Export] public float TurningAccel = 0.5f;
+	[Export] public float StandardAccel = 159.0f; 
+	[Export] public float TurningAccel = 30.0f; 
 	[Export] public float DirThreshold = 49.893f;
 	[Export] public float GravityThreshold = 30.0f;
 	[Export] public float MaxSpeed = 130.0f;
@@ -16,9 +16,7 @@ public partial class Air : LimboState {
 	[Export] public float FallFloatGravity = 235.0f; 
 	[Export] public float JumpCancelFactor = 0.75f;
 	[Export] public float JumpBufferTime = 0.09f;
-	
-	// godot nodes
-	[Export] private Player _body;
+	[Export] private OldPlayer _body;
 	[Export] private Timer _buffer;
 
 	// jump modulation vars

@@ -12,7 +12,7 @@ public partial class Ground : LimboState
 	[Export] public float CoyoteTime = 0.09f;
 	[Export] public float CoyoteGravity = 115.0f;
 	
-	[Export] private Player _body;
+	[Export] private OldPlayer _body;
 	[Export] private Timer _coyote;
 	[Export] private CollisionShape2D _feet;
 	

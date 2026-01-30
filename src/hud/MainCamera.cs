@@ -13,7 +13,7 @@ public partial class MainCamera : Camera2D {
 		Rect2 aperture = InfoManager.GetApertureRect(); // the "window" of the gui cockpit
 		// position camera to correct cell
 		Position = InfoManager.GetPlayerBoardPos();
-		//adjust camera for os window aspect ration
+		// adjust camera for os window aspect ration
 		Offset = -aperture.Position;
 	}
 }

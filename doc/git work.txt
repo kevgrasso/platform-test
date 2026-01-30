@@ -1,0 +1,11 @@
+todo:
+-add sandbox (all branches)
+-/lib/globals/ folder
+-adjust gitconfig (line endings and LFS)
+-adjust gitignore (local)
+-get state charts working
+-LFS migrate (all branches)
+-further work
+
+y = sqrt(1+x^2)
+y = sqrt((x+1)(x-1))

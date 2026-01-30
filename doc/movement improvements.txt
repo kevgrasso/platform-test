@@ -1,0 +1,30 @@
+	enum SpeedOrder
+	{
+		Velocity,
+		Acceleration,
+		Jerk
+	}
+	
+    //CONSTANT JERK EQUATIONS:
+	// a = a0 + j0*t
+	// v = v0 + a0*t + 1/2*j0*t^2
+	// r = r0 + v0t + 1/2*a0*t^2 + 1/6*j0*t^3	
+    
+	private float acceleration = 0.0f;
+	private Vector2 next_vel = new(float.NaN, float.NaN);
+    
+    public bool? BuildAndTryMove(Vector2.Axis axis, float amount, float decay_factor, float delta)
+
+    
+		//calculate change in position happening across timestep
+		//apply ExpDecay
+        //save to Velocity
+		//calculate and save final velocity/acceleration/jerk at timestep end
+        //...
+		//execute movement
+
+		// // velocity noise
+		// if (length != 0)
+		// {
+		// 	amount += random(-1/32, 1/32)
+		// }

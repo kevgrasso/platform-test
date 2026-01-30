@@ -5,11 +5,25 @@ using Godot;
 	static private ReferenceRect _aperture;
 
 	static public void RegisterPlayer(Player player) {
-		_player = player;
+		if (_player == null)
+		{
+			_player = player;
+		}
+		else
+		{
+			throw new System.Exception("player is already registered!");
+		}
 	}
 
 	static public void RegisterAperture(ReferenceRect aperture) {
-		_aperture = aperture;
+		if (_aperture == null)
+		{
+			_aperture = aperture;
+		}
+		else
+		{
+			throw new System.Exception("aperture is already registered!");
+		}
 	}
 
 	static public Vector2I GetPlayerCell(Vector2 grid_offset, Vector2 cell_size) {

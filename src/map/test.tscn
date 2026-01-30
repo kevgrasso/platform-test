@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://lekae33rlxoq" path="res://src/map/MapManager.cs" id="1_41yut"]
 [ext_resource type="TileSet" uid="uid://cgfduvrjhfp3p" path="res://res/tres/modulated tile bg.tres" id="1_oym4t"]
 [ext_resource type="TileSet" uid="uid://d10twc0sxowwx" path="res://res/tres/kenny 1-bit.tres" id="2_w35hb"]
-[ext_resource type="PackedScene" path="res://res/tscn/player.tscn" id="3_xtn66"]
+[ext_resource type="PackedScene" uid="uid://3usgh0tm8i6b" path="res://src/player/player.tscn" id="3_xtn66"]
 [ext_resource type="TileSet" uid="uid://bfx10tndhekm3" path="res://res/tres/modulated tile fg.tres" id="4_b8wg6"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_o6qqx"]

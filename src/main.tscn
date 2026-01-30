@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dklm4g65kclcr"]
 
-[ext_resource type="PackedScene" uid="uid://c5ckhha3drvt1" path="res://res/tscn/map/test.tscn" id="1_uk20t"]
-[ext_resource type="PackedScene" uid="uid://bunltxb5wd7ac" path="res://res/tscn/CockpitHUD.tscn" id="2_paib7"]
+[ext_resource type="PackedScene" uid="uid://c5ckhha3drvt1" path="res://src/map/test.tscn" id="1_uk20t"]
+[ext_resource type="PackedScene" uid="uid://bunltxb5wd7ac" path="res://src/hud/CockpitHUD.tscn" id="2_paib7"]
 [ext_resource type="Script" uid="uid://c0f0fvfhg4x0v" path="res://src/hud/MainCamera.cs" id="3_a363f"]
 
 [node name="GameManager" type="Node2D"]

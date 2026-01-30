@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://c78nby4wdj8aq" path="res://res/font/SevenFifteenMonoRounded-Regular.ttf" id="1_kjt6n"]
 [ext_resource type="Texture2D" uid="uid://lq1s3gyjyy1g" path="res://res/img/kenny 1-bit platformer monochrome_tilemap_packed.png" id="2_iyu8i"]
 [ext_resource type="FontFile" uid="uid://bj70wjx0ov663" path="res://res/font/Silver.ttf" id="3_56o2l"]
-[ext_resource type="Script" path="res://src/hud/ApertureRect.cs" id="3_yha7o"]
+[ext_resource type="Script" uid="uid://dbimrvwq7vcqa" path="res://src/hud/ApertureRect.cs" id="3_yha7o"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x802q"]
 bg_color = Color(0.27451, 0.6, 1, 1)
@@ -74,7 +74,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_x802q")
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
-text = "Mario is here "
+text = "????????"
 label_settings = SubResource("LabelSettings_dus4w")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -105,7 +105,7 @@ theme_override_constants/separation = -2
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_font_sizes/font_size = 15
-text = "Gensou
+text = "Test
 World"
 label_settings = SubResource("LabelSettings_lig8x")
 horizontal_alignment = 1
@@ -121,7 +121,7 @@ custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "Welcome to the amazing world of Touhou!"
+text = "Welcome to the amazing world of gamedev!"
 label_settings = SubResource("LabelSettings_axhrd")
 horizontal_alignment = 1
 autowrap_mode = 3

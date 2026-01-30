@@ -1,0 +1,4 @@
+7z - good for certain needs
+zstandard - good for certain needs
+snappy - fast
+brotli - text only

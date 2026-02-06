@@ -11,42 +11,28 @@ public partial class GroundedBehavior : Node
 	[Export] public float TurnSkidFactor = 0.8f;
 	[Export] public float CoyoteGravity = 115.0f;
 
-	private PlayerBody _body;
+	private PlayerLogic _body;
 	private StateChart _chart;
-	private CollisionShape2D _feet;
 
 	// RESOURCES
 
-	public void Setup(PlayerBody body, StateChart chart, CollisionShape2D feet)
+	public void Setup(PlayerLogic body, StateChart chart)
 	{
 		GD.Print($"grounded setup in");
 		this._body = body;
 		this._chart = chart;
-		this._feet = feet;
 		GD.Print($"grounded setup out");
 	}
 	
-	public void OnGroundedEnter()
-	{
-		GD.Print("feet enabled");
-		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
-	}
-
-	public void OnGroundedExit()
-	{
-		GD.Print("feet disabled");
-		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
-	}
-
 	// UTILITY
 
-	private float GetForwardsness(float direction) => Mathf.Sign(_body.Velocity.X * direction);
+	private float GetForwardsness(float direction) => Mathf.Sign(_body.GetVelX() * direction);
 
 	private float CalcHorizontalMovement(float delta, float direction, float acceleration)
 	{
 		// handle the movement/deceleration
 		float oriented_max_speed = direction * MaxSpeed;
-		return Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, acceleration*delta);
+		return Mathf.MoveToward(_body.GetVelX(), oriented_max_speed, acceleration*delta);
 	}
 	
 	private float CalcHorizontalBraking(float delta, float x_vel)
@@ -90,7 +76,7 @@ public partial class GroundedBehavior : Node
 			x_vel = CalcHorizontalBraking(deltaf, x_vel);
 		}
 
-		_body.BuildAndTryMove(Vector2.Axis.X, x_vel);
+		_body.SendMovement(Vector2.Axis.X, x_vel);
 	}
 
 	// VERTICAL
@@ -101,7 +87,7 @@ public partial class GroundedBehavior : Node
 		{
 			_chart.SendEvent("Fall");
 		}
-		_body.BuildAndTryMove(Vector2.Axis.Y, 0);
+		_body.SendMovement(Vector2.Axis.Y, 0);
 	}
 
 	public void OnGroundedCoyoteTick(double delta)
@@ -115,8 +101,8 @@ public partial class GroundedBehavior : Node
 		else
 		{
 			// in air apply gravity
-			y_vel = _body.CalcAirborneGravity(_body.Velocity.Y, (float)delta, CoyoteGravity);
+			y_vel = _body.CalcAirborneGravity(_body.GetVelY(), (float)delta, CoyoteGravity);
 		}
-		_body.BuildAndTryMove(Vector2.Axis.Y, y_vel);
+		_body.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 }

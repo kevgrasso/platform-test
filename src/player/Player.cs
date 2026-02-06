@@ -6,7 +6,7 @@ using GodotStateCharts;
 
 // are OnLanding transitions in Root/Airborne/Horizontal needed?
 
-public partial class Player : CharacterBody2D
+public partial class PlayerBody : CharacterBody2D
 {
 
 	private StateChart _chart;
@@ -16,7 +16,7 @@ public partial class Player : CharacterBody2D
 	public void Setup(MainCamera camera, RichTextLabel debug)
 	{
 		GD.Print($"player setup in");
-		InfoManager.RegisterPlayer(this);
+		InfoManager.RegisterPlayerBody(this);
 		_chart = StateChart.Of(GetNode("StateChart"));
 		_camera = camera;
 		_debug = debug;

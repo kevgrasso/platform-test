@@ -15,12 +15,12 @@ public partial class AirborneBehavior : Node
 	[Export] public float JumpCancelFactor = 0.75f;
 	// godot nodes
 	
-	private Player _body;
+	private PlayerBody _body;
 	private StateChart _chart;
 
 	// RESOURCES
 
-	public void Setup(Player body, StateChart chart)
+	public void Setup(PlayerBody body, StateChart chart)
 	{
 		GD.Print($"airborne setup in");
 		this._body = body;

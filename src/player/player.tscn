@@ -1,66 +1,28 @@
-[gd_scene load_steps=27 format=3 uid="uid://3usgh0tm8i6b"]
+[gd_scene load_steps=11 format=3 uid="uid://3usgh0tm8i6b"]
 
+[ext_resource type="PackedScene" uid="uid://7875cslq4u7k" path="res://src/player/logic/player_logic.tscn" id="1_mf2ua"]
 [ext_resource type="Script" uid="uid://0stp6bfq4icy" path="res://src/player/Player.cs" id="1_pbgte"]
 [ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://res/img/icon.svg" id="2_1jtts"]
-[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="2_irtkb"]
-[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="3_dj11u"]
-[ext_resource type="Script" uid="uid://hqgxto1ffhuf" path="res://src/player/GroundedBehavior.cs" id="3_q6d88"]
-[ext_resource type="Script" uid="uid://c1vp0ojjvaby1" path="res://addons/godot_state_charts/parallel_state.gd" id="4_nsr2n"]
-[ext_resource type="Script" uid="uid://c3rhg5tpr18e1" path="res://src/player/AirborneBehavior.cs" id="4_rjcp7"]
-[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_lb5nn"]
-[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_lb5nn"]
-[ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="8_nsr2n"]
-[ext_resource type="Script" uid="uid://bambbrd2wupx0" path="res://addons/godot_state_charts/state_is_active_guard.gd" id="11_040dy"]
 
-[sub_resource type="Resource" id="Resource_fpteg"]
-script = ExtResource("8_nsr2n")
-expression = "false"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
+[sub_resource type="Animation" id="Animation_244u8"]
+resource_name = "Walking"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerBody/Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
 
-[sub_resource type="Resource" id="Resource_54rhl"]
-script = ExtResource("8_nsr2n")
-expression = "false"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_gyrcp"]
-script = ExtResource("8_nsr2n")
-expression = "false"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_wme3t"]
-script = ExtResource("8_nsr2n")
-expression = "false"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_q6d88"]
-script = ExtResource("8_nsr2n")
-expression = "false"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_jdgu0"]
-script = ExtResource("8_nsr2n")
-expression = "Velocity.y > 0.0"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_xhhjd"]
-script = ExtResource("11_040dy")
-state = NodePath("../../../Buffer/NoJump")
-metadata/_custom_type_script = "uid://bambbrd2wupx0"
-
-[sub_resource type="Resource" id="Resource_rjcp7"]
-script = ExtResource("8_nsr2n")
-expression = "Velocity.x < -_AirVelThreshold"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_040dy"]
-script = ExtResource("8_nsr2n")
-expression = "Velocity.x > _AirVelThreshold"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
-
-[sub_resource type="Resource" id="Resource_5bx0s"]
-script = ExtResource("8_nsr2n")
-expression = "Velocity.y > _AirGravThreshold"
-metadata/_custom_type_script = "uid://le5w1cm0ul8p"
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5f2sf"]
+_data = {
+&"Walking": SubResource("Animation_244u8")
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_gwl27"]
 radius = 3.0
@@ -79,348 +41,79 @@ slide_on_slope = true
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fg58r"]
 size = Vector2(8, 10)
 
-[node name="Player" type="CharacterBody2D"]
-slide_on_ceiling = false
+[node name="Player" type="Node2D"]
+
+[node name="PlayerLogic" parent="." instance=ExtResource("1_mf2ua")]
+anim_player = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerLogic"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_5f2sf")
+}
+
+[node name="PlayerBody" type="CharacterBody2D" parent="."]
 script = ExtResource("1_pbgte")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="PlayerBody"]
 position = Vector2(-1.19209e-07, 0.5)
 scale = Vector2(0.125, 0.242188)
 texture = ExtResource("2_1jtts")
 
-[node name="GroundedBehavior" type="Node" parent="."]
-script = ExtResource("3_q6d88")
-
-[node name="AirborneBehavior" type="Node" parent="."]
-script = ExtResource("4_rjcp7")
-
-[node name="StateChart" type="Node" parent="."]
-unique_name_in_owner = true
-script = ExtResource("2_irtkb")
-track_in_editor = true
-initial_expression_properties = {
-&"Velocity": Vector2(0, 0),
-&"_AirGravThreshold": 0.0,
-&"_AirJumpBufferTime": 0.09,
-&"_AirVelThreshold": 0.0,
-&"_GndCoyoteTime": 0.09
-}
-metadata/_custom_type_script = "uid://couw105c3bde4"
-
-[node name="Root" type="Node" parent="StateChart"]
-script = ExtResource("4_nsr2n")
-metadata/_custom_type_script = "uid://c1vp0ojjvaby1"
-
-[node name="XBoosting" type="Node" parent="StateChart/Root"]
-process_mode = 4
-script = ExtResource("3_dj11u")
-initial_state = NodePath("BoostOff")
-
-[node name="BoostOff" type="Node" parent="StateChart/Root/XBoosting"]
-script = ExtResource("5_lb5nn")
-
-[node name="BoostOn" type="Node" parent="StateChart/Root/XBoosting"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("BoostLeft")
-
-[node name="BoostLeft" type="Node" parent="StateChart/Root/XBoosting/BoostOn"]
-script = ExtResource("5_lb5nn")
-
-[node name="BoostRight" type="Node" parent="StateChart/Root/XBoosting/BoostOn"]
-script = ExtResource("5_lb5nn")
-
-[node name="AtBoostDecay" type="Node" parent="StateChart/Root/XBoosting/BoostOn"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../BoostOff")
-guard = SubResource("Resource_fpteg")
-delay_in_seconds = "0.0"
-
-[node name="Location" type="Node" parent="StateChart/Root"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("Airborne")
-
-[node name="Grounded" type="Node" parent="StateChart/Root/Location"]
-script = ExtResource("4_nsr2n")
-
-[node name="Vertical" type="Node" parent="StateChart/Root/Location/Grounded"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("Stable")
-
-[node name="Stable" type="Node" parent="StateChart/Root/Location/Grounded/Vertical"]
-script = ExtResource("5_lb5nn")
-
-[node name="OnFall" type="Node" parent="StateChart/Root/Location/Grounded/Vertical/Stable"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../CoyoteTime")
-event = &"Fall"
-delay_in_seconds = "0.0"
-
-[node name="CoyoteTime" type="Node" parent="StateChart/Root/Location/Grounded/Vertical"]
-script = ExtResource("5_lb5nn")
-
-[node name="OnLanding" type="Node" parent="StateChart/Root/Location/Grounded/Vertical/CoyoteTime"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../Stable")
-event = &"Landing"
-delay_in_seconds = "0.0"
-
-[node name="Timeout" type="Node" parent="StateChart/Root/Location/Grounded/Vertical/CoyoteTime"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../../Airborne/Vertical/Fall/QuickFall")
-delay_in_seconds = "_GndCoyoteTime"
-
-[node name="OnJump" type="Node" parent="StateChart/Root/Location/Grounded/Vertical"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../Airborne/Vertical/Jump/JumpRise")
-event = &"Jump"
-delay_in_seconds = "0.0"
-
-[node name="Horizonal" type="Node" parent="StateChart/Root/Location/Grounded"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("Locomotion")
-
-[node name="BufferedJump" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal"]
-script = ExtResource("5_lb5nn")
-
-[node name="Timeout" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal/BufferedJump"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../../Airborne/Vertical/Jump/JumpRise")
-delay_in_seconds = "0.000010000001"
-
-[node name="Locomotion" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal"]
-script = ExtResource("5_lb5nn")
-
-[node name="XAtBoostThreshold" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal/Locomotion"]
-process_mode = 4
-script = ExtResource("6_lb5nn")
-to = NodePath("../../XBoostBuilding")
-guard = SubResource("Resource_54rhl")
-delay_in_seconds = "0.0"
-
-[node name="XBoostBuilding" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal"]
-process_mode = 4
-script = ExtResource("5_lb5nn")
-
-[node name="AtSpeedLoss" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal/XBoostBuilding"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../Locomotion")
-guard = SubResource("Resource_gyrcp")
-delay_in_seconds = "0.0"
-
-[node name="AtBoostLeft" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal/XBoostBuilding"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../../../XBoosting/BoostOn/BoostLeft")
-guard = SubResource("Resource_wme3t")
-delay_in_seconds = "0.0"
-
-[node name="AtBoostRight" type="Node" parent="StateChart/Root/Location/Grounded/Horizonal/XBoostBuilding"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../../../XBoosting/BoostOn/BoostRight")
-guard = SubResource("Resource_q6d88")
-delay_in_seconds = "0.0"
-
-[node name="Airborne" type="Node" parent="StateChart/Root/Location"]
-script = ExtResource("4_nsr2n")
-
-[node name="Vertical" type="Node" parent="StateChart/Root/Location/Airborne"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("Fall")
-
-[node name="Jump" type="Node" parent="StateChart/Root/Location/Airborne/Vertical"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("JumpRise")
-
-[node name="JumpRise" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Jump"]
-script = ExtResource("5_lb5nn")
-
-[node name="AtPeak" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Jump/JumpRise"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../Fall/SlowFall")
-guard = SubResource("Resource_jdgu0")
-delay_in_seconds = "0.0"
-
-[node name="OnJumpCancel" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Jump/JumpRise"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../JumpBrake")
-event = &"JumpCancel"
-delay_in_seconds = "0.0"
-
-[node name="JumpBrake" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Jump"]
-script = ExtResource("5_lb5nn")
-
-[node name="AtPeak" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Jump/JumpBrake"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../Fall/QuickFall")
-guard = SubResource("Resource_xhhjd")
-delay_in_seconds = "0.0"
-
-[node name="Fall" type="Node" parent="StateChart/Root/Location/Airborne/Vertical"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("QuickFall")
-
-[node name="SlowFall" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Fall"]
-script = ExtResource("5_lb5nn")
-
-[node name="OnJumpCancel" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Fall/SlowFall"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../QuickFall")
-event = &"JumpCancel"
-delay_in_seconds = "0.0"
-
-[node name="QuickFall" type="Node" parent="StateChart/Root/Location/Airborne/Vertical/Fall"]
-script = ExtResource("5_lb5nn")
-
-[node name="Horizontal" type="Node" parent="StateChart/Root/Location/Airborne"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("Restricted")
-
-[node name="Restricted" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("Neutral")
-
-[node name="Neutral" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal/Restricted"]
-script = ExtResource("5_lb5nn")
-
-[node name="AtLeft" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal/Restricted/Neutral"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../Left")
-guard = SubResource("Resource_rjcp7")
-delay_in_seconds = "0.0"
-
-[node name="AtRight" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal/Restricted/Neutral"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../Right")
-guard = SubResource("Resource_040dy")
-delay_in_seconds = "0.0"
-
-[node name="Left" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal/Restricted"]
-script = ExtResource("5_lb5nn")
-
-[node name="Right" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal/Restricted"]
-script = ExtResource("5_lb5nn")
-
-[node name="AtFallThreshold" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal/Restricted"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../Unrestricted")
-guard = SubResource("Resource_5bx0s")
-delay_in_seconds = "0.0"
-
-[node name="Unrestricted" type="Node" parent="StateChart/Root/Location/Airborne/Horizontal"]
-script = ExtResource("5_lb5nn")
-
-[node name="Buffer" type="Node" parent="StateChart/Root/Location/Airborne"]
-script = ExtResource("3_dj11u")
-initial_state = NodePath("NoJump")
-
-[node name="NoJump" type="Node" parent="StateChart/Root/Location/Airborne/Buffer"]
-script = ExtResource("5_lb5nn")
-
-[node name="OnJump" type="Node" parent="StateChart/Root/Location/Airborne/Buffer/NoJump"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../LandingJump")
-event = &"Jump"
-delay_in_seconds = "0.0"
-
-[node name="OnLanding" type="Node" parent="StateChart/Root/Location/Airborne/Buffer/NoJump"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../../Grounded/Vertical/Stable")
-event = &"Landing"
-delay_in_seconds = "0.0"
-
-[node name="LandingJump" type="Node" parent="StateChart/Root/Location/Airborne/Buffer"]
-script = ExtResource("5_lb5nn")
-
-[node name="OnJumpCancel" type="Node" parent="StateChart/Root/Location/Airborne/Buffer/LandingJump"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../NoJump")
-event = &"JumpCancel"
-delay_in_seconds = "0.0"
-
-[node name="OnLanding" type="Node" parent="StateChart/Root/Location/Airborne/Buffer/LandingJump"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../../../Grounded/Horizonal/BufferedJump")
-event = &"Landing"
-delay_in_seconds = "0.0"
-
-[node name="Timeout" type="Node" parent="StateChart/Root/Location/Airborne/Buffer/LandingJump"]
-script = ExtResource("6_lb5nn")
-to = NodePath("../../NoJump")
-delay_in_seconds = "_AirJumpBufferTime"
-
-[node name="Core" type="CollisionShape2D" parent="."]
+[node name="Core" type="CollisionShape2D" parent="PlayerBody"]
 shape = SubResource("CircleShape2D_gwl27")
 
-[node name="PushCeiling" type="CollisionShape2D" parent="."]
+[node name="PushCeiling" type="CollisionShape2D" parent="PlayerBody"]
 position = Vector2(0, -1)
 rotation = 3.14159
 shape = SubResource("SeparationRayShape2D_gs7ls")
 
-[node name="PushRightWall-Top" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+[node name="PushRightWall-Top" type="CollisionShape2D" parent="PlayerBody" groups=["RightWallSensors"]]
 position = Vector2(0, -4)
 rotation = -1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 one_way_collision_margin = 0.0
 
-[node name="PushRightWall-Center" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+[node name="PushRightWall-Center" type="CollisionShape2D" parent="PlayerBody" groups=["RightWallSensors"]]
 rotation = 1.5707964
 shape = SubResource("SeparationRayShape2D_virfy")
 one_way_collision_margin = 0.0
 
-[node name="PushRightWall-Bottom" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+[node name="PushRightWall-Bottom" type="CollisionShape2D" parent="PlayerBody" groups=["RightWallSensors"]]
 position = Vector2(0, 4)
 rotation = -1.5707964
 shape = SubResource("SeparationRayShape2D_virfy")
 
-[node name="PushLeftWall-Top" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
+[node name="PushLeftWall-Top" type="CollisionShape2D" parent="PlayerBody" groups=["LeftWallSensors"]]
 position = Vector2(0, -4)
 rotation = 1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 
-[node name="PushLeftWall-Center" type="CollisionShape2D" parent="." groups=["RightWallSensors"]]
+[node name="PushLeftWall-Center" type="CollisionShape2D" parent="PlayerBody" groups=["RightWallSensors"]]
 rotation = -1.5707964
 shape = SubResource("SeparationRayShape2D_virfy")
 one_way_collision_margin = 0.0
 
-[node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="." groups=["LeftWallSensors"]]
+[node name="PushLeftWall-Bottom" type="CollisionShape2D" parent="PlayerBody" groups=["LeftWallSensors"]]
 position = Vector2(0, 4)
 rotation = 1.5708
 shape = SubResource("SeparationRayShape2D_virfy")
 
-[node name="PushFloor-Left" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+[node name="PushFloor-Left" type="CollisionShape2D" parent="PlayerBody" groups=["FloorSensors"]]
 position = Vector2(-5, 3)
 shape = SubResource("SeparationRayShape2D_gs7ls")
 
-[node name="PushFloor-Center" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+[node name="PushFloor-Center" type="CollisionShape2D" parent="PlayerBody" groups=["FloorSensors"]]
 position = Vector2(0, 1)
 shape = SubResource("SeparationRayShape2D_rjcp7")
 
-[node name="PushFloor-Right" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+[node name="PushFloor-Right" type="CollisionShape2D" parent="PlayerBody" groups=["FloorSensors"]]
 position = Vector2(4, 3)
 shape = SubResource("SeparationRayShape2D_gs7ls")
 
-[node name="RetractableFeet" type="CollisionShape2D" parent="." groups=["FloorSensors"]]
+[node name="RetractableFeet" type="CollisionShape2D" parent="PlayerBody" groups=["FloorSensors"]]
 unique_name_in_owner = true
 position = Vector2(0, 11)
 scale = Vector2(0.718, 1)
 shape = SubResource("RectangleShape2D_fg58r")
 disabled = true
-
-[connection signal="state_unhandled_input" from="StateChart/Root" to="." method="OnRootLateInput"]
-[connection signal="state_entered" from="StateChart/Root/Location/Grounded" to="GroundedBehavior" method="OnGroundedEnter"]
-[connection signal="state_exited" from="StateChart/Root/Location/Grounded" to="GroundedBehavior" method="OnGroundedExit"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Grounded/Vertical/Stable" to="GroundedBehavior" method="OnGroundedStableTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Grounded/Vertical/CoyoteTime" to="GroundedBehavior" method="OnGroundedCoyoteTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Grounded/Horizonal/BufferedJump" to="GroundedBehavior" method="OnGroundedLocomotionTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Grounded/Horizonal/Locomotion" to="GroundedBehavior" method="OnGroundedLocomotionTick"]
-[connection signal="state_entered" from="StateChart/Root/Location/Airborne/Vertical/Jump/JumpRise" to="AirborneBehavior" method="OnJumpRiseEnter"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Vertical/Jump/JumpRise" to="AirborneBehavior" method="OnJumpRiseTick"]
-[connection signal="taken" from="StateChart/Root/Location/Airborne/Vertical/Jump/JumpRise/AtPeak" to="." method="PeakDebug"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Vertical/Jump/JumpBrake" to="AirborneBehavior" method="OnJumpBrakeTick"]
-[connection signal="taken" from="StateChart/Root/Location/Airborne/Vertical/Jump/JumpBrake/AtPeak" to="." method="PeakDebug"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Vertical/Fall/SlowFall" to="AirborneBehavior" method="OnSlowFallTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Vertical/Fall/QuickFall" to="AirborneBehavior" method="OnQuickFallTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Horizontal/Restricted/Neutral" to="AirborneBehavior" method="OnHorizontalUnrestrictedTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Horizontal/Restricted/Left" to="AirborneBehavior" method="OnHorizontalRestrictedLeftTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Horizontal/Restricted/Right" to="AirborneBehavior" method="OnHorizontalRestrictedRightTick"]
-[connection signal="state_physics_processing" from="StateChart/Root/Location/Airborne/Horizontal/Unrestricted" to="AirborneBehavior" method="OnHorizontalUnrestrictedTick"]
-[connection signal="taken" from="StateChart/Root/Location/Airborne/Buffer/LandingJump/OnLanding" to="." method="BufferDebug"]

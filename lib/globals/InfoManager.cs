@@ -1,13 +1,13 @@
 using Godot;
 
 [GlobalClass] public partial class InfoManager : Node {
-	static private Player _player;
+	static private PlayerBody _playerBody;
 	static private ReferenceRect _aperture;
 
-	static public void RegisterPlayer(Player player) {
-		if (_player == null)
+	static public void RegisterPlayerBody(PlayerBody body) {
+		if (_playerBody == null)
 		{
-			_player = player;
+			_playerBody = body;
 		}
 		else
 		{
@@ -27,7 +27,7 @@ using Godot;
 	}
 
 	static public Vector2I GetPlayerCell(Vector2 grid_offset, Vector2 cell_size) {
-		return (Vector2I)((grid_offset+_player.GlobalPosition)/cell_size).Floor();
+		return (Vector2I)((grid_offset+_playerBody.GlobalPosition)/cell_size).Floor();
 	}
 
 	static public Vector2I GetPlayerBoard() {

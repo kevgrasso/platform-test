@@ -11,42 +11,42 @@ public partial class GroundedBehavior : Node
 	[Export] public float TurnSkidFactor = 0.8f;
 	[Export] public float CoyoteGravity = 115.0f;
 
-	private Player body;
-	private StateChart chart;
-	private CollisionShape2D feet;
+	private PlayerBody _body;
+	private StateChart _chart;
+	private CollisionShape2D _feet;
 
 	// RESOURCES
 
-	public void Setup(Player body, StateChart chart, CollisionShape2D feet)
+	public void Setup(PlayerBody body, StateChart chart, CollisionShape2D feet)
 	{
 		GD.Print($"grounded setup in");
-		this.body = body;
-		this.chart = chart;
-		this.feet = feet;
+		this._body = body;
+		this._chart = chart;
+		this._feet = feet;
 		GD.Print($"grounded setup out");
 	}
 	
 	public void OnGroundedEnter()
 	{
 		GD.Print("feet enabled");
-		feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
 	}
 
 	public void OnGroundedExit()
 	{
 		GD.Print("feet disabled");
-		feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 	}
 
 	// UTILITY
 
-	private float GetForwardsness(float direction) => Mathf.Sign(body.Velocity.X * direction);
+	private float GetForwardsness(float direction) => Mathf.Sign(_body.Velocity.X * direction);
 
 	private float CalcHorizontalMovement(float delta, float direction, float acceleration)
 	{
 		// handle the movement/deceleration
 		float oriented_max_speed = direction * MaxSpeed;
-		return Mathf.MoveToward(body.Velocity.X, oriented_max_speed, acceleration*delta);
+		return Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, acceleration*delta);
 	}
 	
 	private float CalcHorizontalBraking(float delta, float x_vel)
@@ -90,33 +90,33 @@ public partial class GroundedBehavior : Node
 			x_vel = CalcHorizontalBraking(deltaf, x_vel);
 		}
 
-		body.BuildAndTryMove(Vector2.Axis.X, x_vel);
+		_body.BuildAndTryMove(Vector2.Axis.X, x_vel);
 	}
 
 	// VERTICAL
 
 	public void OnGroundedStableTick(double delta)
 	{
-		if (!body.IsOnFloor()) 
+		if (!_body.IsOnFloor()) 
 		{
-			chart.SendEvent("Fall");
+			_chart.SendEvent("Fall");
 		}
-		body.BuildAndTryMove(Vector2.Axis.Y, 0);
+		_body.BuildAndTryMove(Vector2.Axis.Y, 0);
 	}
 
 	public void OnGroundedCoyoteTick(double delta)
 	{
 		float y_vel;
-		if (body.IsOnFloor()) 
+		if (_body.IsOnFloor()) 
 		{
-			chart.SendEvent("Landing");
+			_chart.SendEvent("Landing");
 			y_vel = 0;
 		}
 		else
 		{
 			// in air apply gravity
-			y_vel = body.CalcAirborneGravity(body.Velocity.Y, (float)delta, CoyoteGravity);
+			y_vel = _body.CalcAirborneGravity(_body.Velocity.Y, (float)delta, CoyoteGravity);
 		}
-		body.BuildAndTryMove(Vector2.Axis.Y, y_vel);
+		_body.BuildAndTryMove(Vector2.Axis.Y, y_vel);
 	}
 }

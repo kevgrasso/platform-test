@@ -15,12 +15,12 @@ public partial class AirborneBehavior : Node
 	[Export] public float JumpCancelFactor = 0.75f;
 	// godot nodes
 	
-	private PlayerBody _body;
-	private StateChart _chart;
+	private PlayerLogic _body;
+	private StateChart _chart; // get rid of chart knowledge?
 
 	// RESOURCES
 
-	public void Setup(PlayerBody body, StateChart chart)
+	public void Setup(PlayerLogic body, StateChart chart)
 	{
 		GD.Print($"airborne setup in");
 		this._body = body;
@@ -29,20 +29,14 @@ public partial class AirborneBehavior : Node
 	}
 
 	// VERTICAL
-
+	
 	public void OnJumpRiseEnter()
 	{
 		// jump setup
-		float up = _body.UpDirection.Y;
-		float jump_velocity = up * BaseJumpVelocity;
-		jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
+		float jump_velocity = BaseJumpVelocity;
+		jump_velocity += Mathf.Abs(_body.GetVelX()) * SpeedJumpVelBonus;
 
-		Vector2 new_vel = new(_body.Velocity.X, jump_velocity);
-		_body.Velocity = new_vel;
-
-		//do not remove--necessary for buffered jumps!
-		_chart.SetExpressionProperty("Velocity", new_vel);
-		GD.Print($"jump body vel: {_body.Velocity.Y}");
+		_body.JumpInit(jump_velocity);
 	}
 
 	private void JumpRiseMovement(float y_vel, float delta, float gravity)
@@ -51,23 +45,24 @@ public partial class AirborneBehavior : Node
 		if (_body.IsOnCeiling()) {
 			// TODO: is this a hack/too simple/too reliant on implementation?
 			y_vel = -_chart.GetExpressionProperty<Vector2>("Velocity").Y;
+			// to be clear, it's getting the velocity from the previous frame
 		} else {
 			y_vel = _body.CalcAirborneGravity(y_vel, delta, gravity);
 		}
 		// potential timestep independence error! move to body.BuildAndTryMove()?
-		_body.BuildAndTryMove(Vector2.Axis.Y, y_vel);
+		_body.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 
 	public void OnJumpRiseTick(double delta)
 	{
-		JumpRiseMovement(_body.Velocity.Y, (float)delta, JumpFloatGravity);
+		JumpRiseMovement(_body.GetVelY(), (float)delta, JumpFloatGravity);
 	}
 
 
 	public void OnJumpBrakeTick(double delta)
 	{
 		// potential timestep independence error! change to ExpDecay()?
-		JumpRiseMovement(_body.Velocity.Y * JumpCancelFactor, (float)delta, JumpFloatGravity);
+		JumpRiseMovement(_body.GetVelY() * JumpCancelFactor, (float)delta, JumpFloatGravity);
 	}
 
 	public void FallMovement(float delta, float gravity)
@@ -77,8 +72,8 @@ public partial class AirborneBehavior : Node
 		} 
 
 		float deltaf = (float)delta;
-		float y_vel = _body.CalcAirborneGravity(_body.Velocity.Y, deltaf, gravity);
-		_body.BuildAndTryMove(Vector2.Axis.Y, y_vel);
+		float y_vel = _body.CalcAirborneGravity(_body.GetVelY(), deltaf, gravity);
+		_body.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 
 	public void OnSlowFallTick(double delta)
@@ -95,7 +90,7 @@ public partial class AirborneBehavior : Node
 
 	private float CalcDirAccel(float jump_direction) {
 		// if moving the opposite direction to the start of the jump
-		if (_body.Velocity.X * jump_direction < 0) {
+		if (_body.GetVelX() * jump_direction < 0) {
 			// backwards jump case--nerf acceleration
 			return TurningAccel;
 		} else {
@@ -110,11 +105,11 @@ public partial class AirborneBehavior : Node
 		float direction = InfoManager.GetInputDirection();
 		float oriented_max_speed = direction * MaxSpeed;
 		float x_vel = direction switch {
-			0.0f => _body.Velocity.X,
-			_ => Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, accel*delta)
+			0.0f => _body.GetVelX(),
+			_ => Mathf.MoveToward(_body.GetVelX(), oriented_max_speed, accel*delta)
 		};
 			
-		_body.BuildAndTryMove(Vector2.Axis.X, x_vel);
+		_body.SendMovement(Vector2.Axis.X, x_vel);
 	}
 
 	public void OnHorizontalUnrestrictedTick(double delta)

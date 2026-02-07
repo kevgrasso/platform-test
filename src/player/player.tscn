@@ -1,9 +1,9 @@
 [gd_scene load_steps=12 format=3 uid="uid://3usgh0tm8i6b"]
 
-[ext_resource type="PackedScene" uid="uid://7875cslq4u7k" path="res://src/player/logic/player_logic.tscn" id="1_mf2ua"]
-[ext_resource type="Script" uid="uid://0stp6bfq4icy" path="res://src/player/PlayerBody.cs" id="1_pbgte"]
+[ext_resource type="PackedScene" uid="uid://7875cslq4u7k" path="res://src/player/clerical_machine/player_clerical_machine.tscn" id="1_mf2ua"]
+[ext_resource type="Script" path="res://src/player/PlayerBody.cs" id="1_pbgte"]
 [ext_resource type="Texture2D" uid="uid://cbyrxpxbugy5l" path="res://res/img/icon.svg" id="2_1jtts"]
-[ext_resource type="Script" uid="uid://ceusm8u04vjnq" path="res://src/player/logic/PlayerLogic.cs" id="2_244u8"]
+[ext_resource type="Script" uid="uid://ceusm8u04vjnq" path="res://src/player/clerical_machine/PlayerClericalMachine.cs" id="2_244u8"]
 
 [sub_resource type="Animation" id="Animation_244u8"]
 resource_name = "Walking"
@@ -44,11 +44,11 @@ size = Vector2(8, 10)
 
 [node name="Player" type="Node2D"]
 
-[node name="PlayerLogic" parent="." instance=ExtResource("1_mf2ua")]
+[node name="PlayerClericalMachine" parent="." instance=ExtResource("1_mf2ua")]
 anim_player = NodePath("AnimationPlayer")
 script = ExtResource("2_244u8")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerLogic"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerClericalMachine"]
 root_node = NodePath("../..")
 libraries = {
 &"": SubResource("AnimationLibrary_5f2sf")

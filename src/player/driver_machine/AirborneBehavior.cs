@@ -15,15 +15,15 @@ public partial class AirborneBehavior : Node
 	[Export] public float JumpCancelFactor = 0.75f;
 	// godot nodes
 	
-	private PlayerMachineClerk _clerk;
+	private PlayerDriverMachine _driver;
 	private StateChart _chart; // get rid of chart knowledge?
 
 	// RESOURCES
 
-	public void Setup(PlayerMachineClerk clerk, StateChart chart)
+	public void Setup(PlayerDriverMachine driver, StateChart chart)
 	{
 		GD.Print($"airborne setup in");
-		this._clerk = clerk;
+		this._driver = driver;
 		this._chart = chart;
 		GD.Print($"airborne setup out");
 	}
@@ -34,46 +34,46 @@ public partial class AirborneBehavior : Node
 	{
 		// jump setup
 		float jump_velocity = BaseJumpVelocity;
-		jump_velocity += Mathf.Abs(_clerk.GetVelX()) * SpeedJumpVelBonus;
+		jump_velocity += Mathf.Abs(_driver.GetVelX()) * SpeedJumpVelBonus;
 
-		_clerk.JumpInit(jump_velocity);
+		_driver.JumpInit(jump_velocity);
 	}
 
 	private void JumpRiseMovement(float y_vel, float delta, float gravity)
 	{
 		// apply gravity
-		if (_clerk.IsOnCeiling()) {
+		if (_driver.IsOnCeiling()) {
 			// TODO: is this a hack/too simple/too reliant on implementation?
 			y_vel = -_chart.GetExpressionProperty<Vector2>("Velocity").Y;
 			// to be clear, it's getting the velocity from the previous frame
 		} else {
-			y_vel = _clerk.CalcAirborneGravity(y_vel, delta, gravity);
+			y_vel = _driver.CalcAirborneGravity(y_vel, delta, gravity);
 		}
 		// potential timestep independence error! move to body.BuildAndTryMove()?
-		_clerk.SendMovement(Vector2.Axis.Y, y_vel);
+		_driver.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 
 	public void OnJumpRiseTick(double delta)
 	{
-		JumpRiseMovement(_clerk.GetVelY(), (float)delta, JumpFloatGravity);
+		JumpRiseMovement(_driver.GetVelY(), (float)delta, JumpFloatGravity);
 	}
 
 
 	public void OnJumpBrakeTick(double delta)
 	{
 		// potential timestep independence error! change to ExpDecay()?
-		JumpRiseMovement(_clerk.GetVelY() * JumpCancelFactor, (float)delta, JumpFloatGravity);
+		JumpRiseMovement(_driver.GetVelY() * JumpCancelFactor, (float)delta, JumpFloatGravity);
 	}
 
 	public void FallMovement(float delta, float gravity)
 	{
-		if (_clerk.IsOnFloor()) {
+		if (_driver.IsOnFloor()) {
 			_chart.SendEvent("Landing");
 		} 
 
 		float deltaf = (float)delta;
-		float y_vel = _clerk.CalcAirborneGravity(_clerk.GetVelY(), deltaf, gravity);
-		_clerk.SendMovement(Vector2.Axis.Y, y_vel);
+		float y_vel = _driver.CalcAirborneGravity(_driver.GetVelY(), deltaf, gravity);
+		_driver.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 
 	public void OnSlowFallTick(double delta)
@@ -90,7 +90,7 @@ public partial class AirborneBehavior : Node
 
 	private float CalcDirAccel(float jump_direction) {
 		// if moving the opposite direction to the start of the jump
-		if (_clerk.GetVelX() * jump_direction < 0) {
+		if (_driver.GetVelX() * jump_direction < 0) {
 			// backwards jump case--nerf acceleration
 			return TurningAccel;
 		} else {
@@ -105,11 +105,11 @@ public partial class AirborneBehavior : Node
 		float direction = InfoManager.GetInputDirection();
 		float oriented_max_speed = direction * MaxSpeed;
 		float x_vel = direction switch {
-			0.0f => _clerk.GetVelX(),
-			_ => Mathf.MoveToward(_clerk.GetVelX(), oriented_max_speed, accel*delta)
+			0.0f => _driver.GetVelX(),
+			_ => Mathf.MoveToward(_driver.GetVelX(), oriented_max_speed, accel*delta)
 		};
 			
-		_clerk.SendMovement(Vector2.Axis.X, x_vel);
+		_driver.SendMovement(Vector2.Axis.X, x_vel);
 	}
 
 	public void OnHorizontalUnrestrictedTick(double delta)

@@ -11,28 +11,28 @@ public partial class GroundedBehavior : Node
 	[Export] public float TurnSkidFactor = 0.8f;
 	[Export] public float CoyoteGravity = 115.0f;
 
-	private PlayerClericalMachine _machine;
+	private PlayerMachineClerk _clerk;
 	private StateChart _chart;
 
 	// RESOURCES
 
-	public void Setup(PlayerClericalMachine machine, StateChart chart)
+	public void Setup(PlayerMachineClerk clerk, StateChart chart)
 	{
 		GD.Print($"grounded setup in");
-		this._machine = machine;
+		this._clerk = clerk;
 		this._chart = chart;
 		GD.Print($"grounded setup out");
 	}
 	
 	// UTILITY
 
-	private float GetForwardsness(float direction) => Mathf.Sign(_machine.GetVelX() * direction);
+	private float GetForwardsness(float direction) => Mathf.Sign(_clerk.GetVelX() * direction);
 
 	private float CalcHorizontalMovement(float delta, float direction, float acceleration)
 	{
 		// handle the movement/deceleration
 		float oriented_max_speed = direction * MaxSpeed;
-		return Mathf.MoveToward(_machine.GetVelX(), oriented_max_speed, acceleration*delta);
+		return Mathf.MoveToward(_clerk.GetVelX(), oriented_max_speed, acceleration*delta);
 	}
 	
 	private float CalcHorizontalBraking(float delta, float x_vel)
@@ -76,24 +76,24 @@ public partial class GroundedBehavior : Node
 			x_vel = CalcHorizontalBraking(deltaf, x_vel);
 		}
 
-		_machine.SendMovement(Vector2.Axis.X, x_vel);
+		_clerk.SendMovement(Vector2.Axis.X, x_vel);
 	}
 
 	// VERTICAL
 
 	public void OnGroundedStableTick(double delta)
 	{
-		if (!_machine.IsOnFloor()) 
+		if (!_clerk.IsOnFloor()) 
 		{
 			_chart.SendEvent("Fall");
 		}
-		_machine.SendMovement(Vector2.Axis.Y, 0);
+		_clerk.SendMovement(Vector2.Axis.Y, 0);
 	}
 
 	public void OnGroundedCoyoteTick(double delta)
 	{
 		float y_vel;
-		if (_machine.IsOnFloor()) 
+		if (_clerk.IsOnFloor()) 
 		{
 			_chart.SendEvent("Landing");
 			y_vel = 0;
@@ -101,8 +101,8 @@ public partial class GroundedBehavior : Node
 		else
 		{
 			// in air apply gravity
-			y_vel = _machine.CalcAirborneGravity(_machine.GetVelY(), (float)delta, CoyoteGravity);
+			y_vel = _clerk.CalcAirborneGravity(_clerk.GetVelY(), (float)delta, CoyoteGravity);
 		}
-		_machine.SendMovement(Vector2.Axis.Y, y_vel);
+		_clerk.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 }

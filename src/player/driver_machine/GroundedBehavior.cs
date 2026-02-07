@@ -11,28 +11,28 @@ public partial class GroundedBehavior : Node
 	[Export] public float TurnSkidFactor = 0.8f;
 	[Export] public float CoyoteGravity = 115.0f;
 
-	private PlayerMachineClerk _clerk;
+	private PlayerDriverMachine _driver;
 	private StateChart _chart;
 
 	// RESOURCES
 
-	public void Setup(PlayerMachineClerk clerk, StateChart chart)
+	public void Setup(PlayerDriverMachine driver, StateChart chart)
 	{
 		GD.Print($"grounded setup in");
-		this._clerk = clerk;
+		this._driver = driver;
 		this._chart = chart;
 		GD.Print($"grounded setup out");
 	}
 	
 	// UTILITY
 
-	private float GetForwardsness(float direction) => Mathf.Sign(_clerk.GetVelX() * direction);
+	private float GetForwardsness(float direction) => Mathf.Sign(_driver.GetVelX() * direction);
 
 	private float CalcHorizontalMovement(float delta, float direction, float acceleration)
 	{
 		// handle the movement/deceleration
 		float oriented_max_speed = direction * MaxSpeed;
-		return Mathf.MoveToward(_clerk.GetVelX(), oriented_max_speed, acceleration*delta);
+		return Mathf.MoveToward(_driver.GetVelX(), oriented_max_speed, acceleration*delta);
 	}
 	
 	private float CalcHorizontalBraking(float delta, float x_vel)
@@ -76,24 +76,24 @@ public partial class GroundedBehavior : Node
 			x_vel = CalcHorizontalBraking(deltaf, x_vel);
 		}
 
-		_clerk.SendMovement(Vector2.Axis.X, x_vel);
+		_driver.SendMovement(Vector2.Axis.X, x_vel);
 	}
 
 	// VERTICAL
 
 	public void OnGroundedStableTick(double delta)
 	{
-		if (!_clerk.IsOnFloor()) 
+		if (!_driver.IsOnFloor()) 
 		{
 			_chart.SendEvent("Fall");
 		}
-		_clerk.SendMovement(Vector2.Axis.Y, 0);
+		_driver.SendMovement(Vector2.Axis.Y, 0);
 	}
 
 	public void OnGroundedCoyoteTick(double delta)
 	{
 		float y_vel;
-		if (_clerk.IsOnFloor()) 
+		if (_driver.IsOnFloor()) 
 		{
 			_chart.SendEvent("Landing");
 			y_vel = 0;
@@ -101,8 +101,8 @@ public partial class GroundedBehavior : Node
 		else
 		{
 			// in air apply gravity
-			y_vel = _clerk.CalcAirborneGravity(_clerk.GetVelY(), (float)delta, CoyoteGravity);
+			y_vel = _driver.CalcAirborneGravity(_driver.GetVelY(), (float)delta, CoyoteGravity);
 		}
-		_clerk.SendMovement(Vector2.Axis.Y, y_vel);
+		_driver.SendMovement(Vector2.Axis.Y, y_vel);
 	}
 }

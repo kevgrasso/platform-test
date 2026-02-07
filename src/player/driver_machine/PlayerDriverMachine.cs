@@ -6,6 +6,7 @@ public partial class PlayerDriverMachine : AnimationTree
 	private PlayerBody _body;
 	private StateChart _chart;
 	private CollisionShape2D _feet;
+	private AirborneBehavior _airBehavior;
 
 	public void Setup(PlayerBody body, CollisionShape2D feet)
 	{
@@ -49,11 +50,14 @@ public partial class PlayerDriverMachine : AnimationTree
 		_feet.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 	}
 
-	public void JumpInit(float jump_velocity)
+	public void OnJumpRiseEnter()
 	{
-		Vector2 new_vel = new(_body.Velocity.X, _body.UpDirection.Y * jump_velocity);
+		// jump setup
+		float vel_x = _body.Velocity.X;
+		float jump_velocity = _airBehavior.GetJumpVelocity(vel_x);
+		Vector2 new_vel = new(vel_x, _body.UpDirection.Y * jump_velocity);
+		
 		_body.Velocity = new_vel;
-
 		//do not remove--necessary for buffered jumps!
 		_chart.SetExpressionProperty("Velocity", new_vel);
 		GD.Print($"jump body vel: {_body.Velocity.Y}");

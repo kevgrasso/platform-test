@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using GodotStateCharts;
 
@@ -30,13 +31,9 @@ public partial class AirborneBehavior : Node
 
 	// VERTICAL
 	
-	public void OnJumpRiseEnter()
+	public float GetJumpVelocity(float x_vel)
 	{
-		// jump setup
-		float jump_velocity = BaseJumpVelocity;
-		jump_velocity += Mathf.Abs(_driver.GetVelX()) * SpeedJumpVelBonus;
-
-		_driver.JumpInit(jump_velocity);
+		return BaseJumpVelocity + Mathf.Abs(x_vel) * SpeedJumpVelBonus;
 	}
 
 	private void JumpRiseMovement(float y_vel, float delta, float gravity)

@@ -1,7 +1,7 @@
 using Godot;
 using GodotStateCharts;
 
-public partial class PlayerClericalMachine : AnimationTree
+public partial class PlayerMachineClerk : AnimationTree
 {
 	private PlayerBody _body;
 	private StateChart _chart;

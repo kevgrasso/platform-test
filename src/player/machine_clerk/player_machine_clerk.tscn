@@ -1,7 +1,7 @@
 [gd_scene load_steps=24 format=3 uid="uid://7875cslq4u7k"]
 
-[ext_resource type="Script" uid="uid://hqgxto1ffhuf" path="res://src/player/clerical_machine/GroundedBehavior.cs" id="1_n8edh"]
-[ext_resource type="Script" uid="uid://c3rhg5tpr18e1" path="res://src/player/clerical_machine/AirborneBehavior.cs" id="2_iul5a"]
+[ext_resource type="Script" uid="uid://hqgxto1ffhuf" path="res://src/player/machine_clerk/GroundedBehavior.cs" id="1_n8edh"]
+[ext_resource type="Script" uid="uid://c3rhg5tpr18e1" path="res://src/player/machine_clerk/AirborneBehavior.cs" id="2_iul5a"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_ermlh"]
 [ext_resource type="Script" uid="uid://c1vp0ojjvaby1" path="res://addons/godot_state_charts/parallel_state.gd" id="4_h5l0u"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="5_c6mmw"]

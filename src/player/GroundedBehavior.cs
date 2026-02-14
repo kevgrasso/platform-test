@@ -40,7 +40,7 @@ public partial class GroundedBehavior : Node
 
 	// UTILITY
 
-	private float GetForwardsness(float direction) => Mathf.Sign(body.Velocity.X * direction);
+	private float GetForwardsness(float direction) => float.Sign(body.Velocity.X * direction);
 
 	private float CalcHorizontalMovement(float delta, float direction, float acceleration)
 	{
@@ -51,7 +51,7 @@ public partial class GroundedBehavior : Node
 	
 	private float CalcHorizontalBraking(float delta, float x_vel)
 	{
-		return x_vel * Mathf.Pow(TurnSkidFactor, (float)delta);
+		return x_vel * float.Pow(TurnSkidFactor, (float)delta);
 	} 
 
 	// HORIZONTAL

@@ -43,7 +43,7 @@ using Godot;
 	}
 
 	static public float GetInputDirection() {
-		return Mathf.Sign(
+		return float.Sign(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left")
 		);
 	}

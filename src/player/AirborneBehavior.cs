@@ -35,7 +35,7 @@ public partial class AirborneBehavior : Node
 		// jump setup
 		float up = _body.UpDirection.Y;
 		float jump_velocity = up * BaseJumpVelocity;
-		jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
+		jump_velocity += up * float.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
 
 		Vector2 new_vel = new(_body.Velocity.X, jump_velocity);
 		_body.Velocity = new_vel;

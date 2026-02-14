@@ -40,7 +40,7 @@ public partial class Air : LimboState {
 			// jump setup
 			float up = _body.UpDirection.Y;
 			float jump_velocity = up * BaseJumpVelocity;
-			jump_velocity += up * Mathf.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
+			jump_velocity += up * float.Abs(_body.Velocity.X) * SpeedJumpVelBonus;
 			_body.Velocity = new Vector2(_body.Velocity.X, jump_velocity);
 			_jump_direction = 0.0f; //reset
 			GD.Print($"jump body vel: {_body.Velocity.Y}");
@@ -112,8 +112,8 @@ public partial class Air : LimboState {
 
 		// calculate the movement
 		float direction = InfoManager.GetInputDirection();
-		if (_jump_direction == 0 && Mathf.Abs(_body.Velocity.X) > DirThreshold) {
-			_jump_direction = Mathf.Sign(_body.Velocity.X);
+		if (_jump_direction == 0 && float.Abs(_body.Velocity.X) > DirThreshold) {
+			_jump_direction = float.Sign(_body.Velocity.X);
 			GD.Print($"x vel: {_body.Velocity.X}; jump dir: {_jump_direction}; {_body.Velocity.X * _jump_direction}");
 		}
 

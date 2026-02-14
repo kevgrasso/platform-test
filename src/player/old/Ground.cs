@@ -77,11 +77,11 @@ public partial class Ground : LimboState
 
 		// handle the movement/deceleration
 		float oriented_max_speed = direction * MaxSpeed;
-		float forwardsness = Mathf.Sign(_body.Velocity.X * direction); 
+		float forwardsness = float.Sign(_body.Velocity.X * direction); 
 		frame_vel.X = Mathf.MoveToward(_body.Velocity.X, oriented_max_speed, GetAccel(direction));
 		if (forwardsness < 0) {
 			// turning case--apply skidding
-			frame_vel.X *= Mathf.Pow(TurnSkidFactor, (float)delta);
+			frame_vel.X *= float.Pow(TurnSkidFactor, (float)delta);
 		} else if (forwardsness > 0 || frame_vel.X == 0) {
 			// if stationary or holding forwards cancel stop
 			_is_landing_stop = false;

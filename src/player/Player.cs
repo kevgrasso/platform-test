@@ -62,7 +62,7 @@ public partial class Player : CharacterBody2D
 		if (frame_vel.IsFinite())
 		{
 			// if wall normal  and velocity x axis are opposing directions, cancel x axis movement
-			if (IsOnWall() && Mathf.Sign(GetWallNormal().X * frame_vel.X) == -1.0f) {
+			if (IsOnWall() && float.Sign(GetWallNormal().X * frame_vel.X) == -1.0f) {
 				frame_vel.X = 0;
 			}
 			_chart.SetExpressionProperty("Velocity", frame_vel);

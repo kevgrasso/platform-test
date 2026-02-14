@@ -27,7 +27,7 @@ public partial class OldPlayer : CharacterBody2D {
 
 	public bool SetAndMove(Vector2 velocity) {
 		// if wall normal  and velocity x axis are opposing directions, cancel x axis movement
-		if (IsOnWall() && Mathf.Sign(GetWallNormal().X * velocity.X) == -1.0f) {
+		if (IsOnWall() && float.Sign(GetWallNormal().X * velocity.X) == -1.0f) {
 			velocity.X = 0;
 		}
 

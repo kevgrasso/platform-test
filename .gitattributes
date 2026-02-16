@@ -31,4 +31,5 @@
 *.dll filter=lfs diff=lfs merge=lfs -text
 /addons/godot_state_charts/LICENSE filter=lfs diff=lfs merge=lfs -text
 *.cfg filter=lfs diff=lfs merge=lfs -text
+*.py filter=lfs diff=lfs merge=lfs -text
 * !text !filter !merge !diff

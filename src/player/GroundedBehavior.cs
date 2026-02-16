@@ -83,7 +83,7 @@ public partial class GroundedBehavior : Node
 	{
 		float deltaf = (float)delta;
 
-		float direction = InfoManager.GetInputDirection();
+		float direction = PlayerServer.GetInputDirection();
 		float x_vel = CalcHorizontalMovement(deltaf, direction, LandingDeaccel);
 		if (GetForwardsness(direction) < 0)
 		{

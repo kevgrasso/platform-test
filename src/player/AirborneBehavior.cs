@@ -107,7 +107,7 @@ public partial class AirborneBehavior : Node
 	private void HorizontalMovement(float delta, float accel)
 	{
 		// calculate the movement
-		float direction = InfoManager.GetInputDirection();
+		float direction = PlayerServer.GetInputDirection();
 		float oriented_max_speed = direction * MaxSpeed;
 		float x_vel = direction switch {
 			0.0f => _body.Velocity.X,

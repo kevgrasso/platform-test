@@ -111,7 +111,7 @@ public partial class Air : LimboState {
 		}
 
 		// calculate the movement
-		float direction = InfoManager.GetInputDirection();
+		float direction = PlayerServer.GetInputDirection();
 		if (_jump_direction == 0 && float.Abs(_body.Velocity.X) > DirThreshold) {
 			_jump_direction = float.Sign(_body.Velocity.X);
 			GD.Print($"x vel: {_body.Velocity.X}; jump dir: {_jump_direction}; {_body.Velocity.X * _jump_direction}");

@@ -1,6 +1,6 @@
 using Godot;
 
-[GlobalClass] public partial class InfoManager : Node {
+[GlobalClass] public partial class PlayerServer : Node {
 	static private Player _player;
 	static private ReferenceRect _aperture;
 

@@ -16,7 +16,7 @@ public partial class Player : CharacterBody2D
 	public void Setup(MainCamera camera, RichTextLabel debug)
 	{
 		GD.Print($"player setup in");
-		InfoManager.RegisterPlayer(this);
+		PlayerServer.RegisterPlayer(this);
 		_chart = StateChart.Of(GetNode("StateChart"));
 		_camera = camera;
 		_debug = debug;

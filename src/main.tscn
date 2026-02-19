@@ -1,10 +1,106 @@
-[gd_scene load_steps=4 format=3 uid="uid://dklm4g65kclcr"]
+[gd_scene load_steps=10 format=3 uid="uid://dklm4g65kclcr"]
 
+[ext_resource type="FontVariation" uid="uid://dsq2hhbrhkf2i" path="res://res/tres/FontVariation/silver.tres" id="1_3cfgd"]
 [ext_resource type="PackedScene" uid="uid://c5ckhha3drvt1" path="res://src/map/test.tscn" id="1_uk20t"]
 [ext_resource type="PackedScene" uid="uid://bunltxb5wd7ac" path="res://src/hud/CockpitHUD.tscn" id="2_paib7"]
 [ext_resource type="Script" uid="uid://c0f0fvfhg4x0v" path="res://src/hud/MainCamera.cs" id="3_a363f"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kmhfv"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.6660417, 0.6660417, 0.6660417, 1)
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3cfgd"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.8, 0.8, 0.8, 0)
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rlaii"]
+content_margin_left = 5.0
+content_margin_top = 2.0
+content_margin_right = 5.0
+content_margin_bottom = 2.0
+bg_color = Color(0.53333336, 0.53333336, 0.53333336, 1)
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fyndt"]
+bg_color = Color(0.8, 0.8, 0.8, 1)
+border_width_bottom = 1
+border_color = Color(0.4, 0.4, 0.4, 1)
+
+[sub_resource type="Theme" id="Theme_kmhfv"]
+default_font = ExtResource("1_3cfgd")
+default_font_size = 19
+MenuBar/colors/font_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+MenuBar/constants/h_separation = 0
+MenuBar/constants/outline_size = 3
+MenuBar/styles/disabled = null
+MenuBar/styles/hover = SubResource("StyleBoxFlat_kmhfv")
+MenuBar/styles/normal = SubResource("StyleBoxFlat_3cfgd")
+MenuBar/styles/pressed = SubResource("StyleBoxFlat_rlaii")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_fyndt")
+
 [node name="GameManager" type="Node2D"]
+
+[node name="MetaGUI" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MetaGUI"]
+offset_right = 640.0
+offset_bottom = 15.0
+theme = SubResource("Theme_kmhfv")
+
+[node name="MenuBar" type="MenuBar" parent="MetaGUI/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 10.0
+
+[node name="File" type="PopupMenu" parent="MetaGUI/PanelContainer/MenuBar"]
+oversampling_override = 1.0
+size = Vector2i(166, 100)
+item_count = 7
+item_0/text = "Manage PRG Disk Drive"
+item_0/id = 0
+item_1/text = "Manage DAT Disk Drive"
+item_1/id = 1
+item_2/id = 4
+item_2/separator = true
+item_3/text = "Soft Reset"
+item_3/id = 6
+item_4/text = "Hard Reset"
+item_4/id = 7
+item_5/id = 8
+item_5/separator = true
+item_6/text = "Exit"
+item_6/id = 3
+
+[node name="Settings" type="PopupMenu" parent="MetaGUI/PanelContainer/MenuBar"]
+item_count = 3
+item_0/text = "Input..."
+item_0/id = 0
+item_1/text = "Audio..."
+item_1/id = 2
+item_2/text = "Video..."
+item_2/id = 1
+
+[node name="Help" type="PopupMenu" parent="MetaGUI/PanelContainer/MenuBar"]
+item_count = 1
+item_0/text = "About"
+item_0/id = 0
+
+[node name="改善" type="PopupMenu" parent="MetaGUI/PanelContainer/MenuBar"]
+item_count = 1
+item_0/text = "test"
+item_0/id = 0
 
 [node name="MainCamera" type="Camera2D" parent="."]
 unique_name_in_owner = true

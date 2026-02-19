@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://dsq2hhbrhkf2i"]
+
+[ext_resource type="FontFile" uid="uid://bj70wjx0ov663" path="res://res/font/Silver.ttf" id="1_78atq"]
+
+[resource]
+base_font = ExtResource("1_78atq")
+spacing_bottom = -7

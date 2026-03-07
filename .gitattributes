@@ -4,8 +4,6 @@
 # split sections into small sections + better organization
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
-# Put contents of img folder into lfs (comment out for testing)
-res/img/** filter=lfs diff=lfs merge=lfs -text
 # Built-In Diff Algorithms: Documents
 *.bibtex text diff=bibtex
 *.css text diff=css

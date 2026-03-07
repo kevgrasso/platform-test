@@ -1,9 +1,11 @@
 ##  Text File Tracking
 
-# Normalize EOL for all files that Git considers text files.
-* text=auto eol=lf
 # TODO: add linguist-language tags
 # split sections into small sections + better organization
+# Normalize EOL for all files that Git considers text files.
+* text=auto eol=lf
+# Put contents of img folder into lfs (comment out for testing)
+# res/img/** filter=lfs diff=lfs merge=lfs -text
 # Built-In Diff Algorithms: Documents
 *.bibtex text diff=bibtex
 *.css text diff=css
@@ -66,10 +68,14 @@
 # $ git config --global merge.ours.driver true
 schema.rb merge=ours diff=ruby
 # Visual Studio Code
-*.csproj text eol=crlf
-*.fsproj text eol=crlf
+*.[Dd]ot[Ss]ettings text eol=crlf linguist-language=xml 
+*.csproj text eol=crlf linguist-language=xml 
+*.fsproj text eol=crlf linguist-language=xml 
+*.props text eol=crlf linguist-language=xml 
 *.sln text eol=crlf
-*.slnx text eol=crlf
+*.slnx text eol=crlf linguist-language=xml 
+*.targets text eol=crlf linguist-language=xml 
+*.vcxproj text eol=crlf linguist-language=xml 
 # Source Files
 *.asm text
 *.bas text
@@ -106,22 +112,23 @@ schema.rb merge=ours diff=ruby
 *.twig text
 *.uss text diff=css linguist-language=css
 *.uxml text linguist-language=xml linguist-detectable
+*.yarn text
 # Force Microsoft batch scripts to always use CRLF line endings so that if a repo 
 # is accessed in Windows via a file share from Linux, the scripts will work.
-*.{bat,[bB][aA][tT]} text eol=crlf
-*.{cmd,[cC][mM][dD]} text eol=crlf
-*.{ics,[iI][cC][sS]} text eol=crlf
+*.[bB][aA][tT] text eol=crlf
+*.[cC][mM][dD] text eol=crlf
+*.[iI][cC][sS] text eol=crlf
 # Powershell
-*.cdxml text eol=crlf diff=xml
+*.cdxml text eol=crlf linguist-language=xml 
 *.msh eol=crlf
 *.msh1 text eol=crlf
-*.msh1xml text eol=crlf diff=xml
+*.msh1xml text eol=crlf linguist-language=xml 
 *.msh2 text eol=crlf
-*.msh2xml text eol=crlf diff=xml
-*.mshxml text eol=crlf diff=xml
+*.msh2xml text eol=crlf linguist-language=xml 
+*.mshxml text eol=crlf linguist-language=xml 
 *.ps1 text eol=crlf
-*.ps1x text eol=crlf diff=xml
-*.ps1xml text eol=crlf diff=xml
+*.ps1x text eol=crlf linguist-language=xml 
+*.ps1xml text eol=crlf linguist-language=xml 
 *.psd1 text eol=crlf
 *.psm1 text eol=crlf
 *.psrc text eol=crlf
@@ -167,6 +174,7 @@ schema.rb merge=ours diff=ruby
 *.tsv text
 *.xml text
 *.yaml text
+*.yarnproject text linguist-language=json
 *.yml text
 # Ignore files (like .npmignore or .gitignore)
 *.*ignore text 
@@ -226,13 +234,16 @@ TODO text
 # Misc Godot Text (not sure if correct format)
 *.cfg text
 *.csv text eol=crlf
+*.dch text
 *.gd text
 *.gdextension text
-*.gdshade text
-*.gdshadeinc text
+*.gdshader text
+*.gdshaderinc text
+*.gdx text
 *.import text
 *.mtl text
 *.po text
+*.pot text
 *.tres text
 *.tscn text
 *.uid text
@@ -683,6 +694,7 @@ project.godot text
 *.pck filter=lfs diff=lfs merge=lfs -text
 *.res filter=lfs diff=lfs merge=lfs -text
 *.scn filter=lfs diff=lfs merge=lfs -text
+*.theme filter=lfs diff=lfs merge=lfs -text
 # UE file types (just in case)
 *.uasset filter=lfs diff=lfs merge=lfs -text
 *.umap filter=lfs diff=lfs merge=lfs -text
@@ -708,7 +720,6 @@ LightingData.asset binary
 *.md filter=lfs diff=lfs merge=lfs -text
 *.tscn filter=lfs diff=lfs merge=lfs -text
 *.gd filter=lfs diff=lfs merge=lfs -text
-*.theme filter=lfs diff=lfs merge=lfs -text
 *.godot filter=lfs diff=lfs merge=lfs -text
 *.txt filter=lfs diff=lfs merge=lfs -text
 *.1 filter=lfs diff=lfs merge=lfs -text
